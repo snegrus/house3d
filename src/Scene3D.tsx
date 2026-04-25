@@ -29,7 +29,7 @@ const isPillar = (id: string) => /^p\d+$/.test(id);
 const isSolidStepOrPlatform = (id: string) =>
   isGreenPlatformStep(id) || isGarageStepOrPlatform(id) || isGarageCar(id) || isPillar(id);
 const wallsWithoutFoundation = new Set(["w23", "w24", "w25", "w31", "w32", "w34", "w35", "w36"]);
-const pillarsWithoutFoundation = new Set(["p7", "p9", "p10", "p13", "p16"]);
+const pillarsWithoutFoundation = new Set(["p7", "p9", "p10", "p16"]);
 
 export function Scene3D({ model, activeFloorId, showAllFloors, wireframe, sunStudy, interactionEnabled }: Scene3DProps) {
   const mountRef = useRef<HTMLDivElement | null>(null);

@@ -245,7 +245,7 @@ textarea {
 .workspace {
   display: grid;
   gap: 14px;
-  grid-template-rows: minmax(420px, 1.2fr) minmax(320px, 0.8fr);
+  grid-template-rows: minmax(360px, 0.9fr) minmax(520px, 1.3fr);
   max-height: 100vh;
   overflow: hidden;
   padding: 14px;
@@ -302,7 +302,7 @@ textarea {
   background: #f7f9fc;
   flex: 1;
   height: 100%;
-  min-height: 220px;
+  min-height: 340px;
   width: 100%;
 }
 
@@ -310,11 +310,49 @@ textarea {
   min-height: 0;
 }
 
+.plan-shell {
+  background: linear-gradient(180deg, #fbfcfe 0%, #f1f5f9 100%);
+  cursor: grab;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+  touch-action: none;
+}
+
+.plan-shell.dragging {
+  cursor: grabbing;
+}
+
+.plan-toolbar {
+  align-items: center;
+  background: rgba(255, 255, 255, 0.94);
+  border-bottom: 1px solid #d9e0e8;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+  padding: 8px 10px;
+}
+
+.plan-toolbar span {
+  color: #506075;
+  font-size: 0.82rem;
+  font-weight: 700;
+  min-width: 48px;
+  text-align: right;
+}
+
+.plan-toolbar button {
+  min-height: 30px;
+  padding: 0 10px;
+}
+
 .plans-stack {
-  display: grid;
+  display: flex;
+  flex-direction: column;
   gap: 12px;
-  grid-auto-rows: minmax(280px, 1fr);
-  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
   min-height: 0;
   overflow: auto;
   padding: 12px;
@@ -326,7 +364,7 @@ textarea {
   border-radius: 8px;
   display: flex;
   flex-direction: column;
-  min-height: 280px;
+  min-height: 440px;
   overflow: hidden;
 }
 
@@ -417,13 +455,9 @@ textarea {
   }
 
   .workspace {
-    grid-template-rows: minmax(100vh, 100vh) 520px;
+    grid-template-rows: minmax(100vh, 100vh) 720px;
     max-height: none;
     padding: 0;
-  }
-
-  .plans-stack {
-    grid-template-columns: 1fr;
   }
 
   .view-card.large {
