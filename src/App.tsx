@@ -1,4 +1,4 @@
-import { ChangeEvent, useMemo, useState } from "react";
+import { ChangeEvent, useEffect, useMemo, useState } from "react";
 import type { Floor, HouseModel, HouseObject, Wall } from "./model";
 import { validateHouseModel } from "./model";
 import { Plan2D } from "./Plan2D";
@@ -120,6 +120,8 @@ export function App() {
   const [jsonError, setJsonError] = useState("");
   const [wireframe, setWireframe] = useState(true);
   const [showAllFloors, setShowAllFloors] = useState(true);
+  const [mobileControlsOpen, setMobileControlsOpen] = useState(false);
+  const [controlMode, setControlMode] = useState(false);
   const [sunStudy, setSunStudy] = useState<SunStudySettings>(() => ({
     ...SUN_STUDY_LOCATION,
     date: getLocalDateString(new Date()),
@@ -136,6 +138,11 @@ export function App() {
   const sunStudyYear = Number(sunStudy.date.slice(0, 4));
   const dayOfYear = useMemo(() => getDayOfYear(sunStudy.date), [sunStudy.date]);
   const monthMarkers = useMemo(() => getMonthMarkers(sunStudyYear), [sunStudyYear]);
+
+  useEffect(() => {
+    document.body.classList.toggle("control-mode-active", controlMode);
+    return () => document.body.classList.remove("control-mode-active");
+  }, [controlMode]);
 
   const commitModel = (next: HouseModel) => {
     setModel(next);
@@ -240,8 +247,8 @@ export function App() {
   };
 
   return (
-    <main className="app-shell">
-      <aside className="sidebar">
+    <main className={`app-shell ${mobileControlsOpen ? "mobile-controls-open" : ""} ${controlMode ? "control-mode" : ""}`}>
+      <aside className={`sidebar ${mobileControlsOpen ? "open" : ""}`}>
         <div className="brand-block">
           <h1>{model.name}</h1>
           <p>Centimeter-based local draft model</p>
@@ -437,12 +444,21 @@ export function App() {
             <h2>3D Wire Model</h2>
             <span>{showAllFloors ? `${activeFloor.name} with sun study` : `${activeFloor.name} with sun study`}</span>
           </div>
+          <div className="mobile-scene-toolbar">
+            <button onClick={() => setMobileControlsOpen((current) => !current)}>
+              {mobileControlsOpen ? "Hide Controls" : "Show Controls"}
+            </button>
+            <button onClick={() => setControlMode((current) => !current)}>
+              {controlMode ? "Exit 3D Controls" : "Enter 3D Controls"}
+            </button>
+          </div>
           <Scene3D
             model={model}
             activeFloorId={activeFloor.id}
             showAllFloors={showAllFloors}
             wireframe={wireframe}
             sunStudy={sunStudy}
+            interactionEnabled={controlMode}
           />
         </div>
 

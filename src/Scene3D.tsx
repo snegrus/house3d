@@ -18,6 +18,7 @@ type Scene3DProps = {
   showAllFloors: boolean;
   wireframe: boolean;
   sunStudy: SunStudySettings;
+  interactionEnabled: boolean;
 };
 
 const CM_TO_M = 0.01;
@@ -30,7 +31,7 @@ const isSolidStepOrPlatform = (id: string) =>
 const wallsWithoutFoundation = new Set(["w23", "w24", "w25", "w31", "w32", "w34", "w35", "w36"]);
 const pillarsWithoutFoundation = new Set(["p7", "p9", "p10", "p13", "p16"]);
 
-export function Scene3D({ model, activeFloorId, showAllFloors, wireframe, sunStudy }: Scene3DProps) {
+export function Scene3D({ model, activeFloorId, showAllFloors, wireframe, sunStudy, interactionEnabled }: Scene3DProps) {
   const mountRef = useRef<HTMLDivElement | null>(null);
   const cameraStateRef = useRef<{
     target: THREE.Vector3;
@@ -63,6 +64,7 @@ export function Scene3D({ model, activeFloorId, showAllFloors, wireframe, sunStu
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.setSize(mount.clientWidth, mount.clientHeight);
+    renderer.domElement.style.touchAction = interactionEnabled ? "none" : "auto";
     mount.appendChild(renderer.domElement);
 
     const grid = new THREE.GridHelper(Math.max(largest, 5), Math.max(Math.ceil(largest), 5), "#c5ccd6", "#dce1e8");
@@ -389,6 +391,7 @@ export function Scene3D({ model, activeFloorId, showAllFloors, wireframe, sunStu
     };
 
     const onPointerDown = (event: PointerEvent) => {
+      if (!interactionEnabled) return;
       isDragging = true;
       previousX = event.clientX;
       previousY = event.clientY;
@@ -409,6 +412,7 @@ export function Scene3D({ model, activeFloorId, showAllFloors, wireframe, sunStu
       renderer.domElement.releasePointerCapture(event.pointerId);
     };
     const onWheel = (event: WheelEvent) => {
+      if (!interactionEnabled) return;
       event.preventDefault();
       spherical.radius = Math.min(80, Math.max(2, spherical.radius + event.deltaY * 0.01));
       render();
@@ -460,9 +464,9 @@ export function Scene3D({ model, activeFloorId, showAllFloors, wireframe, sunStu
         }
       });
     };
-  }, [activeFloorId, model, showAllFloors, sunStudy, wireframe]);
+  }, [activeFloorId, interactionEnabled, model, showAllFloors, sunStudy, wireframe]);
 
-  return <div className="viewport" ref={mountRef} />;
+  return <div className={`viewport ${interactionEnabled ? "interactive" : "passive"}`} ref={mountRef} />;
 }
 
 function createTextSprite(text: string, variant: "wall" | "coordinate" | "axis" = "wall") {

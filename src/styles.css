@@ -16,6 +16,10 @@ body {
   margin: 0;
 }
 
+body.control-mode-active {
+  overflow: hidden;
+}
+
 button,
 select,
 input,
@@ -268,6 +272,30 @@ textarea {
 .viewport {
   flex: 1;
   min-height: 280px;
+  position: relative;
+}
+
+.viewport.interactive {
+  overscroll-behavior: contain;
+}
+
+.mobile-scene-toolbar {
+  display: none;
+}
+
+.viewport.passive::after {
+  align-items: center;
+  background: rgba(28, 36, 48, 0.08);
+  color: #344153;
+  content: "3D controls locked";
+  display: none;
+  font-size: 0.82rem;
+  font-weight: 700;
+  inset: 0;
+  justify-content: center;
+  letter-spacing: 0.02em;
+  pointer-events: none;
+  position: absolute;
 }
 
 .plan {
@@ -371,16 +399,70 @@ textarea {
     grid-template-columns: 1fr;
   }
 
-  .sidebar,
-  .workspace {
-    max-height: none;
+  .sidebar {
+    border-right: 0;
+    border-top: 1px solid #d9e0e8;
+    bottom: 0;
+    left: 0;
+    max-height: min(78vh, 760px);
+    position: fixed;
+    right: 0;
+    transform: translateY(calc(100% - 58px));
+    transition: transform 180ms ease;
+    z-index: 30;
+  }
+
+  .sidebar.open {
+    transform: translateY(0);
   }
 
   .workspace {
-    grid-template-rows: 420px 520px;
+    grid-template-rows: minmax(100vh, 100vh) 520px;
+    max-height: none;
+    padding: 0;
   }
 
   .plans-stack {
     grid-template-columns: 1fr;
+  }
+
+  .view-card.large {
+    border-radius: 0;
+    border-left: 0;
+    border-right: 0;
+    border-top: 0;
+  }
+
+  .view-card.large .view-header {
+    padding-right: 12px;
+  }
+
+  .mobile-scene-toolbar {
+    display: flex;
+    gap: 8px;
+    left: 12px;
+    position: absolute;
+    right: 12px;
+    top: 54px;
+    z-index: 15;
+  }
+
+  .mobile-scene-toolbar button {
+    background: rgba(28, 36, 48, 0.86);
+    border-color: rgba(28, 36, 48, 0.86);
+    flex: 1;
+    justify-content: center;
+  }
+
+  .viewport {
+    min-height: calc(100vh - 44px);
+  }
+
+  .viewport.passive::after {
+    display: flex;
+  }
+
+  .app-shell.control-mode .sidebar {
+    transform: translateY(100%);
   }
 }
