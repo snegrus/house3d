@@ -1,0 +1,4 @@
+interface:
+  display_name: "Architectural Model Editor"
+  short_description: "Edit structured architectural geometry safely"
+  default_prompt: "Use $architectural-model-editor to update this house model while preserving geometric consistency."

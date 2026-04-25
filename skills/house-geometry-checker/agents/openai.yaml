@@ -1,0 +1,4 @@
+interface:
+  display_name: "House Geometry Checker"
+  short_description: "Check house models for geometric consistency"
+  default_prompt: "Use $house-geometry-checker to validate this house model and report geometry issues."
