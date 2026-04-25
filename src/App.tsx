@@ -122,6 +122,9 @@ export function App() {
   const [showAllFloors, setShowAllFloors] = useState(true);
   const [mobileControlsOpen, setMobileControlsOpen] = useState(false);
   const [controlMode, setControlMode] = useState(false);
+  const [isMobileLayout, setIsMobileLayout] = useState(() =>
+    typeof window !== "undefined" ? window.matchMedia("(max-width: 980px)").matches : false,
+  );
   const [sunStudy, setSunStudy] = useState<SunStudySettings>(() => ({
     ...SUN_STUDY_LOCATION,
     date: getLocalDateString(new Date()),
@@ -143,6 +146,16 @@ export function App() {
     document.body.classList.toggle("control-mode-active", controlMode);
     return () => document.body.classList.remove("control-mode-active");
   }, [controlMode]);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 980px)");
+    const sync = () => setIsMobileLayout(mediaQuery.matches);
+    sync();
+    mediaQuery.addEventListener("change", sync);
+    return () => mediaQuery.removeEventListener("change", sync);
+  }, []);
+
+  const sceneInteractionEnabled = !isMobileLayout || controlMode;
 
   const commitModel = (next: HouseModel) => {
     setModel(next);
@@ -458,7 +471,7 @@ export function App() {
             showAllFloors={showAllFloors}
             wireframe={wireframe}
             sunStudy={sunStudy}
-            interactionEnabled={controlMode}
+            interactionEnabled={sceneInteractionEnabled}
           />
         </div>
 
