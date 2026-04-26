@@ -22,33 +22,34 @@ export type StructuralAxis = {
 };
 
 export function getFloorBounds(floor: Floor): Bounds {
-  const points: Vec2[] = [
-    ...floor.walls.flatMap((wall) => wallFootprint(wall)),
-    ...floor.spaces.flatMap((space) => space.boundary),
-    ...(floor.axes?.vertical ?? []).flatMap((axis) => [
-      { x: axisCoordinate(axis), y: 0 },
-      { x: axisCoordinate(axis), y: 0 },
-    ]),
-    ...(floor.axes?.horizontal ?? []).flatMap((axis) => [
-      { x: 0, y: axisCoordinate(axis) },
-      { x: 0, y: axisCoordinate(axis) },
-    ]),
-    ...floor.objects.flatMap((object) => [
-      { x: object.position.x - object.size.x / 2, y: object.position.y - object.size.y / 2 },
-      { x: object.position.x + object.size.x / 2, y: object.position.y + object.size.y / 2 },
-    ]),
-  ];
+  let minX = Infinity;
+  let minY = Infinity;
+  let maxX = -Infinity;
+  let maxY = -Infinity;
 
-  if (points.length === 0) {
+  const include = (x: number, y: number) => {
+    if (x < minX) minX = x;
+    if (y < minY) minY = y;
+    if (x > maxX) maxX = x;
+    if (y > maxY) maxY = y;
+  };
+
+  floor.walls.forEach((wall) => {
+    wallFootprint(wall).forEach((point) => include(point.x, point.y));
+  });
+  floor.spaces.forEach((space) => {
+    space.boundary.forEach((point) => include(point.x, point.y));
+  });
+  floor.axes?.vertical.forEach((axis) => include(axisCoordinate(axis), 0));
+  floor.axes?.horizontal.forEach((axis) => include(0, axisCoordinate(axis)));
+  floor.objects.forEach((object) => {
+    include(object.position.x - object.size.x / 2, object.position.y - object.size.y / 2);
+    include(object.position.x + object.size.x / 2, object.position.y + object.size.y / 2);
+  });
+
+  if (!Number.isFinite(minX)) {
     return { minX: 0, minY: 0, maxX: 1000, maxY: 1000, width: 1000, height: 1000 };
   }
-
-  const xs = points.map((point) => point.x);
-  const ys = points.map((point) => point.y);
-  const minX = Math.min(...xs);
-  const minY = Math.min(...ys);
-  const maxX = Math.max(...xs);
-  const maxY = Math.max(...ys);
 
   return {
     minX,

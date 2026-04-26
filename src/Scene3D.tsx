@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
-import type { HouseModel, Space, Wall } from "./model";
+import type { Floor, HouseModel, Space, Wall } from "./model";
 import {
   getFloorBounds,
   getModelBounds,
@@ -10,6 +10,7 @@ import {
   wallMetrics,
   wallNormal,
 } from "./geometry";
+import { isPillar, isSolidStructuralStep } from "./houseObjects";
 import { getSunPath, getSunPosition, type SunStudySettings } from "./solar";
 
 type Scene3DProps = {
@@ -21,15 +22,14 @@ type Scene3DProps = {
   interactionEnabled: boolean;
 };
 
+type WallMetrics = ReturnType<typeof wallMetrics>;
+
 const CM_TO_M = 0.01;
-const isGreenPlatformStep = (id: string) => id.startsWith("green-platform-");
-const isGarageStepOrPlatform = (id: string) => id === "garage-platform" || id.startsWith("garage-step-");
-const isGarageCar = (id: string) => id === "garage-car-rav4-prime";
-const isPillar = (id: string) => /^p\d+$/.test(id);
-const isSolidStepOrPlatform = (id: string) =>
-  isGreenPlatformStep(id) || isGarageStepOrPlatform(id) || isGarageCar(id) || isPillar(id);
-const wallsWithoutFoundation = new Set(["w23", "w24", "w25", "w31", "w32", "w34", "w35", "w36"]);
-const pillarsWithoutFoundation = new Set(["p7", "p9", "p10", "p16"]);
+const isForceSolidObject = (id: string) => isSolidStructuralStep(id) || isPillar(id);
+const GRID_EXTENT_MULTIPLIER = 4;
+const MIN_GRID_EXTENT_M = 22;
+const AXIS_PADDING_CM = 190;
+const AXIS_LABEL_OFFSET_CM = 145;
 
 export function Scene3D({ model, activeFloorId, showAllFloors, wireframe, sunStudy, interactionEnabled }: Scene3DProps) {
   const mountRef = useRef<HTMLDivElement | null>(null);
@@ -67,10 +67,13 @@ export function Scene3D({ model, activeFloorId, showAllFloors, wireframe, sunStu
     renderer.domElement.style.touchAction = interactionEnabled ? "none" : "auto";
     mount.appendChild(renderer.domElement);
 
-    const grid = new THREE.GridHelper(Math.max(largest, 5), Math.max(Math.ceil(largest), 5), "#c5ccd6", "#dce1e8");
-    grid.position.set(centerX * CM_TO_M, 0, centerY * CM_TO_M);
-    scene.add(grid);
-    const groundExtent = Math.max(largest * 3.2, 18);
+    const gridExtent = Math.max(largest * GRID_EXTENT_MULTIPLIER, MIN_GRID_EXTENT_M);
+    if (wireframe) {
+      const grid = new THREE.GridHelper(gridExtent, Math.max(Math.ceil(gridExtent), 5), "#9ca4ae", "#b7bec7");
+      grid.position.set(centerX * CM_TO_M, 0, centerY * CM_TO_M);
+      scene.add(grid);
+    }
+    const groundExtent = gridExtent;
     const ground = new THREE.Mesh(
       new THREE.PlaneGeometry(groundExtent, groundExtent),
       new THREE.MeshLambertMaterial({
@@ -93,14 +96,21 @@ export function Scene3D({ model, activeFloorId, showAllFloors, wireframe, sunStu
     const sunLight = new THREE.DirectionalLight("#fff2c7", 1.05);
     scene.add(sunLight);
 
-    const materialFor = (color: string, opacity = 1, forceSolid = false) =>
-      new THREE.MeshLambertMaterial({
+    const materialCache = new Map<string, THREE.MeshLambertMaterial>();
+    const materialFor = (color: string, opacity = 1, forceSolid = false) => {
+      const key = `${color}|${opacity}|${forceSolid ? 1 : 0}`;
+      const cached = materialCache.get(key);
+      if (cached) return cached;
+      const material = new THREE.MeshLambertMaterial({
         color,
         wireframe: forceSolid ? false : wireframe,
         transparent: opacity < 1,
         opacity,
         side: THREE.DoubleSide,
       });
+      materialCache.set(key, material);
+      return material;
+    };
     const axisMaterial = new THREE.LineDashedMaterial({
       color: "#256f8f",
       dashSize: 0.16,
@@ -191,50 +201,49 @@ export function Scene3D({ model, activeFloorId, showAllFloors, wireframe, sunStu
     floors.forEach((floor) => {
       const floorY = floor.elevation * CM_TO_M;
       const floorBounds = getFloorBounds(floor);
-      const axisPadding = 80;
-
       getStructuralAxes(floor).forEach((axis) => {
         const lineY = floorY + 0.035;
         const points =
           axis.orientation === "vertical"
             ? [
-                new THREE.Vector3(axis.coordinate * CM_TO_M, lineY, (floorBounds.minY - axisPadding) * CM_TO_M),
-                new THREE.Vector3(axis.coordinate * CM_TO_M, lineY, (floorBounds.maxY + axisPadding) * CM_TO_M),
+                new THREE.Vector3(axis.coordinate * CM_TO_M, lineY, (floorBounds.minY - AXIS_PADDING_CM) * CM_TO_M),
+                new THREE.Vector3(axis.coordinate * CM_TO_M, lineY, (floorBounds.maxY + AXIS_PADDING_CM) * CM_TO_M),
               ]
             : [
-                new THREE.Vector3((floorBounds.minX - axisPadding) * CM_TO_M, lineY, axis.coordinate * CM_TO_M),
-                new THREE.Vector3((floorBounds.maxX + axisPadding) * CM_TO_M, lineY, axis.coordinate * CM_TO_M),
+                new THREE.Vector3((floorBounds.minX - AXIS_PADDING_CM) * CM_TO_M, lineY, axis.coordinate * CM_TO_M),
+                new THREE.Vector3((floorBounds.maxX + AXIS_PADDING_CM) * CM_TO_M, lineY, axis.coordinate * CM_TO_M),
               ];
         const geometry = new THREE.BufferGeometry().setFromPoints(points);
         const line = new THREE.Line(geometry, axisMaterial);
         line.computeLineDistances();
         scene.add(line);
 
-        const label = createTextSprite(axis.label, "axis");
-        const labelPosition =
+        const labelPositions =
           axis.orientation === "vertical"
-            ? new THREE.Vector3(axis.coordinate * CM_TO_M, floorY + 0.16, (floorBounds.minY - axisPadding / 2) * CM_TO_M)
-            : new THREE.Vector3((floorBounds.minX - axisPadding / 2) * CM_TO_M, floorY + 0.16, axis.coordinate * CM_TO_M);
-        label.position.copy(labelPosition);
-        scene.add(label);
+            ? [
+                new THREE.Vector3(axis.coordinate * CM_TO_M, floorY + 0.16, (floorBounds.minY - AXIS_LABEL_OFFSET_CM) * CM_TO_M),
+                new THREE.Vector3(axis.coordinate * CM_TO_M, floorY + 0.16, (floorBounds.maxY + AXIS_LABEL_OFFSET_CM) * CM_TO_M),
+              ]
+            : [
+                new THREE.Vector3((floorBounds.minX - AXIS_LABEL_OFFSET_CM) * CM_TO_M, floorY + 0.16, axis.coordinate * CM_TO_M),
+                new THREE.Vector3((floorBounds.maxX + AXIS_LABEL_OFFSET_CM) * CM_TO_M, floorY + 0.16, axis.coordinate * CM_TO_M),
+              ];
+
+        labelPositions.forEach((position) => {
+          const label = createTextSprite(axis.label, "axis");
+          label.position.copy(position);
+          scene.add(label);
+        });
       });
 
       floor.spaces.forEach((space) => {
-        const shape = new THREE.Shape();
-        space.boundary.forEach((point, index) => {
-          const x = point.x * CM_TO_M;
-          const y = point.y * CM_TO_M;
-          if (index === 0) shape.moveTo(x, y);
-          else shape.lineTo(x, y);
-        });
-        shape.closePath();
-        const geometry = new THREE.ShapeGeometry(shape);
+        const geometry = buildSpaceShapeGeometry(space);
         const mesh = new THREE.Mesh(geometry, materialFor(space.color ?? "#e8eef7", wireframe ? 0.62 : 1, true));
         mesh.rotation.x = Math.PI / 2;
         mesh.position.y = floorY + (space.baseElevation ?? 0) * CM_TO_M + 0.01;
         mesh.receiveShadow = true;
         scene.add(mesh);
-        addCeiling(scene, floorY, space, ceilingMaterial);
+        addCeiling(scene, floor, space, ceilingMaterial);
       });
 
       floor.walls.forEach((wall) => {
@@ -242,7 +251,7 @@ export function Scene3D({ model, activeFloorId, showAllFloors, wireframe, sunStu
         const wallCenter = wallLabelPoint(wall);
         const wallBaseY = floorY + (wall.baseElevation ?? 0) * CM_TO_M;
 
-        if ((wall.baseElevation ?? 0) > 0 && !wallsWithoutFoundation.has(wall.id)) {
+        if ((wall.baseElevation ?? 0) > 0 && wall.renderFoundation !== false) {
           const foundationHeight = (wall.baseElevation ?? 0) * CM_TO_M;
           const foundationGeometry = new THREE.BoxGeometry(
             metrics.length * CM_TO_M,
@@ -257,7 +266,7 @@ export function Scene3D({ model, activeFloorId, showAllFloors, wireframe, sunStu
           scene.add(foundation);
         }
 
-        renderWall(scene, wall, floorY, materialFor(wall.color ?? "#303946", wireframe ? 1 : 0.72));
+        renderWall(scene, wall, metrics, floorY, materialFor(wall.color ?? "#303946", wireframe ? 1 : 0.72));
 
         const label = createTextSprite(wall.id);
         label.position.set(wallCenter.x * CM_TO_M, wallBaseY + wall.height * CM_TO_M + 0.22, wallCenter.y * CM_TO_M);
@@ -319,7 +328,7 @@ export function Scene3D({ model, activeFloorId, showAllFloors, wireframe, sunStu
           object.baseElevation === undefined
             ? floorY + object.position.z * CM_TO_M
             : floorY + (object.baseElevation + object.size.z / 2) * CM_TO_M;
-        if (isPillar(object.id) && (object.baseElevation ?? 0) > 0 && !pillarsWithoutFoundation.has(object.id)) {
+        if (isPillar(object.id) && (object.baseElevation ?? 0) > 0 && object.renderFoundation !== false) {
           const foundationHeight = (object.baseElevation ?? 0) * CM_TO_M;
           const foundationGeometry = new THREE.BoxGeometry(
             object.size.x * CM_TO_M,
@@ -336,7 +345,7 @@ export function Scene3D({ model, activeFloorId, showAllFloors, wireframe, sunStu
           foundation.receiveShadow = true;
           scene.add(foundation);
         }
-        const forceSolid = isSolidStepOrPlatform(object.id);
+        const forceSolid = isForceSolidObject(object.id);
         const mesh = new THREE.Mesh(
           geometry,
           materialFor(object.color ?? "#69788c", forceSolid || wireframe ? 1 : 0.85, forceSolid),
@@ -515,25 +524,26 @@ function createTextSprite(text: string, variant: "wall" | "coordinate" | "axis" 
 function renderWall(
   scene: THREE.Scene,
   wall: Wall,
+  metrics: WallMetrics,
   floorY: number,
   material: THREE.Material,
 ) {
-  const metrics = wallMetrics(wall.from, wall.to);
   const openings = [...(wall.openings ?? [])].sort((a, b) => a.offset - b.offset);
   let cursor = 0;
 
   openings.forEach((opening) => {
     if (opening.offset > cursor) {
-      addWallBox(scene, wall, floorY, material, cursor, opening.offset - cursor, 0, wall.height);
+      addWallBox(scene, wall, metrics, floorY, material, cursor, opening.offset - cursor, 0, wall.height);
     }
     if (opening.baseHeight > 0) {
-      addWallBox(scene, wall, floorY, material, opening.offset, opening.length, 0, opening.baseHeight);
+      addWallBox(scene, wall, metrics, floorY, material, opening.offset, opening.length, 0, opening.baseHeight);
     }
     const topHeight = wall.height - opening.baseHeight - opening.height;
     if (topHeight > 0) {
       addWallBox(
         scene,
         wall,
+        metrics,
         floorY,
         material,
         opening.offset,
@@ -546,13 +556,14 @@ function renderWall(
   });
 
   if (cursor < metrics.length) {
-    addWallBox(scene, wall, floorY, material, cursor, metrics.length - cursor, 0, wall.height);
+    addWallBox(scene, wall, metrics, floorY, material, cursor, metrics.length - cursor, 0, wall.height);
   }
 }
 
 function addWallBox(
   scene: THREE.Scene,
   wall: Wall,
+  metrics: WallMetrics,
   floorY: number,
   material: THREE.Material,
   offset: number,
@@ -561,25 +572,17 @@ function addWallBox(
   height: number,
 ) {
   if (length <= 0 || height <= 0) return;
-  const metrics = wallMetrics(wall.from, wall.to);
-  const direction = {
-    x: metrics.dx / metrics.length,
-    y: metrics.dy / metrics.length,
-  };
-  const start = {
-    x: wall.from.x + direction.x * offset,
-    y: wall.from.y + direction.y * offset,
-  };
-  const center = {
-    x: start.x + direction.x * (length / 2),
-    y: start.y + direction.y * (length / 2),
-  };
+  const dirX = metrics.dx / metrics.length;
+  const dirY = metrics.dy / metrics.length;
+  const centerOffset = offset + length / 2;
+  const centerX = wall.from.x + dirX * centerOffset;
+  const centerY = wall.from.y + dirY * centerOffset;
   const geometry = new THREE.BoxGeometry(length * CM_TO_M, height * CM_TO_M, wall.thickness * CM_TO_M);
   const mesh = new THREE.Mesh(geometry, material);
   mesh.position.set(
-    center.x * CM_TO_M,
+    centerX * CM_TO_M,
     floorY + ((wall.baseElevation ?? 0) + heightOffset + height / 2) * CM_TO_M,
-    center.y * CM_TO_M,
+    centerY * CM_TO_M,
   );
   mesh.rotation.y = -metrics.angle;
   mesh.castShadow = true;
@@ -587,7 +590,7 @@ function addWallBox(
   scene.add(mesh);
 }
 
-function addCeiling(scene: THREE.Scene, floorY: number, space: Space, material: THREE.Material) {
+function buildSpaceShapeGeometry(space: Space) {
   const shape = new THREE.Shape();
   space.boundary.forEach((point, index) => {
     const x = point.x * CM_TO_M;
@@ -596,10 +599,16 @@ function addCeiling(scene: THREE.Scene, floorY: number, space: Space, material: 
     else shape.lineTo(x, y);
   });
   shape.closePath();
-  const geometry = new THREE.ShapeGeometry(shape);
+  return new THREE.ShapeGeometry(shape);
+}
+
+function addCeiling(scene: THREE.Scene, floor: Floor, space: Space, material: THREE.Material) {
+  const geometry = buildSpaceShapeGeometry(space);
   const mesh = new THREE.Mesh(geometry, material);
   mesh.rotation.x = Math.PI / 2;
-  mesh.position.y = floorY + ((space.baseElevation ?? 0) + 270) * CM_TO_M - 0.01;
+  const floorY = floor.elevation * CM_TO_M;
+  mesh.position.y =
+    floorY + ((space.baseElevation ?? 0) + floor.defaultWallHeight) * CM_TO_M - 0.01;
   mesh.castShadow = true;
   mesh.receiveShadow = true;
   scene.add(mesh);

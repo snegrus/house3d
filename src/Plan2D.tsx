@@ -1,4 +1,4 @@
-import { PointerEvent, WheelEvent, useRef, useState } from "react";
+import { PointerEvent, WheelEvent, useMemo, useRef, useState } from "react";
 import type { Floor } from "./model";
 import {
   getFloorBounds,
@@ -8,23 +8,26 @@ import {
   wallLabelPoint,
   wallMetrics,
 } from "./geometry";
+import { isSolidStructuralStep } from "./houseObjects";
 
 type Plan2DProps = {
   floor: Floor;
 };
 
-const isSolidStepOrPlatform = (id: string) =>
-  id.startsWith("green-platform-") || id === "garage-platform" || id.startsWith("garage-step-") || id === "garage-car-rav4-prime";
+const PLAN_PADDING_X = 140;
+const PLAN_PADDING_Y = 96;
+const AXIS_LABEL_GAP = 28;
 
 export function Plan2D({ floor }: Plan2DProps) {
-  const bounds = getFloorBounds(floor);
-  const structuralAxes = getStructuralAxes(floor);
-  const padding = 80;
-  const viewBox = `${bounds.minX - padding} ${bounds.minY - padding} ${bounds.width + padding * 2} ${bounds.height + padding * 2}`;
-  const viewWidth = bounds.width + padding * 2;
-  const viewHeight = bounds.height + padding * 2;
-  const viewCenterX = bounds.minX - padding + viewWidth / 2;
-  const viewCenterY = bounds.minY - padding + viewHeight / 2;
+  const bounds = useMemo(() => getFloorBounds(floor), [floor]);
+  const structuralAxes = useMemo(() => getStructuralAxes(floor), [floor]);
+  const viewMinX = bounds.minX - PLAN_PADDING_X;
+  const viewMinY = bounds.minY - PLAN_PADDING_Y;
+  const viewWidth = bounds.width + PLAN_PADDING_X * 2;
+  const viewHeight = bounds.height + PLAN_PADDING_Y * 2;
+  const viewBox = `${viewMinX} ${viewMinY} ${viewWidth} ${viewHeight}`;
+  const viewCenterX = viewMinX + viewWidth / 2;
+  const viewCenterY = viewMinY + viewHeight / 2;
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [scale, setScale] = useState(1);
   const [pan, setPan] = useState({ x: 0, y: 0 });
@@ -49,9 +52,9 @@ export function Plan2D({ floor }: Plan2DProps) {
     const pointerX = event.clientX - rect.left;
     const pointerY = event.clientY - rect.top;
     const worldX =
-      bounds.minX - padding + ((pointerX / rect.width) * viewWidth - pan.x - viewWidth / 2) / scale + viewWidth / 2;
+      viewMinX + ((pointerX / rect.width) * viewWidth - pan.x - viewWidth / 2) / scale + viewWidth / 2;
     const worldY =
-      bounds.minY - padding + ((pointerY / rect.height) * viewHeight - pan.y - viewHeight / 2) / scale + viewHeight / 2;
+      viewMinY + ((pointerY / rect.height) * viewHeight - pan.y - viewHeight / 2) / scale + viewHeight / 2;
     const nextPanX = (pointerX / rect.width) * viewWidth - viewWidth / 2 - scaleToOffset(worldX, viewCenterX, nextScale);
     const nextPanY = (pointerY / rect.height) * viewHeight - viewHeight / 2 - scaleToOffset(worldY, viewCenterY, nextScale);
 
@@ -75,8 +78,8 @@ export function Plan2D({ floor }: Plan2DProps) {
   const handlePointerMove = (event: PointerEvent<HTMLDivElement>) => {
     if (!dragState || dragState.pointerId !== event.pointerId || !containerRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
-    const unitsPerPixelX = viewWidth / rect.width / scale;
-    const unitsPerPixelY = viewHeight / rect.height / scale;
+    const unitsPerPixelX = viewWidth / rect.width;
+    const unitsPerPixelY = viewHeight / rect.height;
     setPan({
       x: dragState.originX + (event.clientX - dragState.startX) * unitsPerPixelX,
       y: dragState.originY + (event.clientY - dragState.startY) * unitsPerPixelY,
@@ -123,10 +126,10 @@ export function Plan2D({ floor }: Plan2DProps) {
         </defs>
         <g transform={transform}>
           <rect
-            x={bounds.minX - padding}
-            y={bounds.minY - padding}
-            width={bounds.width + padding * 2}
-            height={bounds.height + padding * 2}
+            x={viewMinX}
+            y={viewMinY}
+            width={viewWidth}
+            height={viewHeight}
             fill={`url(#grid-cm-${floor.id})`}
           />
           {floor.spaces.map((space) => (
@@ -143,23 +146,29 @@ export function Plan2D({ floor }: Plan2DProps) {
               <g key={axis.id} className="structural-axis">
                 <line
                   x1={axis.coordinate}
-                  y1={bounds.minY - padding}
+                  y1={viewMinY}
                   x2={axis.coordinate}
-                  y2={bounds.maxY + padding}
+                  y2={bounds.maxY + PLAN_PADDING_Y}
                 />
-                <text x={axis.coordinate} y={bounds.minY - padding / 2} textAnchor="middle">
+                <text x={axis.coordinate} y={viewMinY - AXIS_LABEL_GAP} textAnchor="middle">
+                  {axis.label}
+                </text>
+                <text x={axis.coordinate} y={bounds.maxY + PLAN_PADDING_Y + AXIS_LABEL_GAP} textAnchor="middle">
                   {axis.label}
                 </text>
               </g>
             ) : (
               <g key={axis.id} className="structural-axis">
                 <line
-                  x1={bounds.minX - padding}
+                  x1={viewMinX}
                   y1={axis.coordinate}
-                  x2={bounds.maxX + padding}
+                  x2={bounds.maxX + PLAN_PADDING_X}
                   y2={axis.coordinate}
                 />
-                <text x={bounds.minX - padding / 2} y={axis.coordinate + 8} textAnchor="middle">
+                <text x={viewMinX - AXIS_LABEL_GAP} y={axis.coordinate + 8} textAnchor="middle">
+                  {axis.label}
+                </text>
+                <text x={bounds.maxX + PLAN_PADDING_X + AXIS_LABEL_GAP} y={axis.coordinate + 8} textAnchor="middle">
                   {axis.label}
                 </text>
               </g>
@@ -198,7 +207,7 @@ export function Plan2D({ floor }: Plan2DProps) {
                 width={object.size.x}
                 height={object.size.y}
                 fill={object.color ?? "#69788c"}
-                fillOpacity={isSolidStepOrPlatform(object.id) ? "1" : "0.85"}
+                fillOpacity={isSolidStructuralStep(object.id) ? "1" : "0.85"}
                 stroke="#27313f"
                 strokeWidth="4"
               />

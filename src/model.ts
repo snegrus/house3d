@@ -18,6 +18,7 @@ export type Wall = {
   to: Vec2;
   height: number;
   baseElevation?: number;
+  renderFoundation?: boolean;
   thickness: number;
   thicknessSide?: "center" | "left" | "right";
   color?: string;
@@ -55,6 +56,7 @@ export type HouseObject = {
   position: Vec3;
   size: Vec3;
   baseElevation?: number;
+  renderFoundation?: boolean;
   rotationZ?: number;
   color?: string;
   category?: "furniture" | "appliance" | "fixture" | "storage" | "structural" | "custom";
@@ -170,6 +172,9 @@ export function validateHouseModel(value: unknown): ValidationIssue[] {
       if (wall.baseElevation !== undefined && (!isNumber(wall.baseElevation) || wall.baseElevation < 0)) {
         issues.push({ path: `${path}.baseElevation`, message: "Wall base elevation must be zero or positive." });
       }
+      if (wall.renderFoundation !== undefined && typeof wall.renderFoundation !== "boolean") {
+        issues.push({ path: `${path}.renderFoundation`, message: "Wall renderFoundation must be a boolean." });
+      }
       if (!isNumber(wall.thickness) || wall.thickness <= 0) {
         issues.push({ path: `${path}.thickness`, message: "Wall thickness must be positive." });
       }
@@ -269,6 +274,9 @@ export function validateHouseModel(value: unknown): ValidationIssue[] {
       }
       if (object.baseElevation !== undefined && (!isNumber(object.baseElevation) || object.baseElevation < 0)) {
         issues.push({ path: `${path}.baseElevation`, message: "Object base elevation must be zero or positive." });
+      }
+      if (object.renderFoundation !== undefined && typeof object.renderFoundation !== "boolean") {
+        issues.push({ path: `${path}.renderFoundation`, message: "Object renderFoundation must be a boolean." });
       }
     });
   });

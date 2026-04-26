@@ -245,7 +245,7 @@ textarea {
 .workspace {
   display: grid;
   gap: 14px;
-  grid-template-rows: minmax(520px, 1.2fr) minmax(420px, 1fr);
+  grid-template-rows: minmax(0, 1fr);
   max-height: 100vh;
   overflow: hidden;
   padding: 14px;
@@ -262,6 +262,10 @@ textarea {
   min-height: 560px;
 }
 
+.workspace-card {
+  min-height: 0;
+}
+
 .view-header {
   border-bottom: 1px solid #d9e0e8;
   min-height: 44px;
@@ -271,6 +275,49 @@ textarea {
 .view-header span {
   color: #697588;
   font-size: 0.86rem;
+}
+
+.workspace-view-switcher {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.workspace-view-switcher button {
+  background: #eff3f7;
+  border-color: #d3dbe4;
+  color: #344153;
+}
+
+.workspace-view-switcher button.active {
+  background: #263241;
+  border-color: #263241;
+  color: #fff;
+}
+
+.workspace-pane-stage {
+  flex: 1;
+  min-height: 0;
+  position: relative;
+}
+
+.workspace-pane {
+  display: flex;
+  flex-direction: column;
+  inset: 0;
+  min-height: 0;
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+  visibility: hidden;
+}
+
+.workspace-pane.active {
+  opacity: 1;
+  pointer-events: auto;
+  visibility: visible;
+  z-index: 1;
 }
 
 .viewport {
@@ -308,10 +355,6 @@ textarea {
   height: 100%;
   min-height: 340px;
   width: 100%;
-}
-
-.plans-card {
-  min-height: 0;
 }
 
 .plan-shell {
@@ -353,22 +396,11 @@ textarea {
   padding: 0 10px;
 }
 
-.plans-stack {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  min-height: 0;
-  overflow: auto;
-  padding: 12px;
-}
-
 .plan-section {
   background: #f7f9fc;
-  border: 1px solid #d9e0e8;
-  border-radius: 8px;
   display: flex;
   flex-direction: column;
-  min-height: 440px;
+  min-height: 0;
   overflow: hidden;
 }
 
@@ -459,20 +491,34 @@ textarea {
   }
 
   .workspace {
-    grid-template-rows: minmax(100vh, 100vh) 720px;
+    grid-template-rows: minmax(100vh, 100vh);
     max-height: none;
     padding: 0;
   }
 
-  .view-card.large {
+  .workspace-card {
     border-radius: 0;
     border-left: 0;
     border-right: 0;
     border-top: 0;
   }
 
-  .view-card.large .view-header {
+  .workspace-card .view-header {
     padding-right: 12px;
+  }
+
+  .workspace-view-switcher {
+    overflow-x: auto;
+    padding: 8px 0;
+    scrollbar-width: thin;
+    width: 100%;
+  }
+
+  .view-header {
+    align-items: flex-start;
+    flex-direction: column;
+    padding-bottom: 8px;
+    padding-top: 8px;
   }
 
   .mobile-scene-toolbar {
@@ -507,10 +553,10 @@ textarea {
 
 @media (min-width: 1280px) {
   .workspace {
-    grid-template-rows: minmax(620px, 1.35fr) minmax(360px, 0.85fr);
+    grid-template-rows: minmax(0, 1fr);
   }
 
-  .view-card.large {
+  .workspace-card {
     min-height: 660px;
   }
 }

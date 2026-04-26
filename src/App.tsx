@@ -15,6 +15,8 @@ import {
   type SunStudySettings,
 } from "./solar";
 
+type WorkspacePane = "3d" | string;
+
 const STORAGE_KEY = "ciurbesti-house-model-v2";
 const STORAGE_FORMAT = 1;
 const SAMPLE_SIGNATURE = hashString(JSON.stringify(sampleHouse));
@@ -113,10 +115,18 @@ function nextWallId(model: HouseModel) {
   return `w${index}`;
 }
 
+function getInitialPaneFromUrl(): WorkspacePane {
+  if (typeof window === "undefined") return "3d";
+  const params = new URLSearchParams(window.location.search);
+  const pane = params.get("pane")?.trim();
+  return pane && pane.length > 0 ? pane : "3d";
+}
+
 export function App() {
   const [model, setModel] = useState(loadInitialModel);
   const [jsonText, setJsonText] = useState(() => JSON.stringify(loadInitialModel(), null, 2));
   const [activeFloorId, setActiveFloorId] = useState(() => loadInitialModel().floors[0]?.id ?? "");
+  const [activePane, setActivePane] = useState<WorkspacePane>(getInitialPaneFromUrl);
   const [jsonError, setJsonError] = useState("");
   const [wireframe, setWireframe] = useState(true);
   const [showAllFloors, setShowAllFloors] = useState(true);
@@ -136,6 +146,8 @@ export function App() {
     () => model.floors.find((floor) => floor.id === activeFloorId) ?? model.floors[0],
     [activeFloorId, model.floors],
   );
+  const activePaneFloor =
+    activePane !== "3d" ? model.floors.find((floor) => floor.id === activePane) : undefined;
   const validationIssues = useMemo(() => validateHouseModel(model), [model]);
   const sunPosition = useMemo(() => getSunPosition(sunStudy), [sunStudy]);
   const sunStudyYear = Number(sunStudy.date.slice(0, 4));
@@ -157,6 +169,40 @@ export function App() {
 
   const sceneInteractionEnabled = !isMobileLayout || controlMode;
 
+  const selectFloor = (floorId: string) => {
+    setActiveFloorId(floorId);
+    if (activePane !== "3d") {
+      setActivePane(floorId);
+    }
+  };
+
+  useEffect(() => {
+    if (activePane === "3d") return;
+    const paneExists = model.floors.some((floor) => floor.id === activePane);
+    if (!paneExists) {
+      setActivePane("3d");
+    }
+  }, [activePane, model.floors]);
+
+  useEffect(() => {
+    if (activePane === "3d" || activeFloorId === activePane) return;
+    const paneFloorExists = model.floors.some((floor) => floor.id === activePane);
+    if (paneFloorExists) {
+      setActiveFloorId(activePane);
+    }
+  }, [activeFloorId, activePane, model.floors]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const url = new URL(window.location.href);
+    if (activePane === "3d") {
+      url.searchParams.delete("pane");
+    } else {
+      url.searchParams.set("pane", activePane);
+    }
+    window.history.replaceState({}, "", `${url.pathname}${url.search}${url.hash}`);
+  }, [activePane]);
+
   const commitModel = (next: HouseModel) => {
     setModel(next);
     setJsonText(JSON.stringify(next, null, 2));
@@ -167,6 +213,7 @@ export function App() {
     setJsonError("");
     commitModel(sampleHouse);
     setActiveFloorId(sampleHouse.floors[0]?.id ?? "");
+    setActivePane("3d");
   };
 
   const applyJson = () => {
@@ -180,6 +227,7 @@ export function App() {
       }
       commitModel(parsed);
       setActiveFloorId(parsed.floors[0]?.id ?? "");
+      setActivePane("3d");
     } catch (error) {
       setJsonError(error instanceof Error ? error.message : "Invalid JSON.");
     }
@@ -201,6 +249,7 @@ export function App() {
         setJsonError("");
         commitModel(parsed);
         setActiveFloorId(parsed.floors[0]?.id ?? "");
+        setActivePane("3d");
       } catch (error) {
         setJsonError(error instanceof Error ? error.message : "Invalid JSON.");
       }
@@ -222,6 +271,7 @@ export function App() {
     });
     commitModel(next);
     setActiveFloorId(`floor-${index}`);
+    setActivePane(`floor-${index}`);
   };
 
   const addWall = () => {
@@ -297,7 +347,7 @@ export function App() {
             <h2>Floors</h2>
             <button onClick={addFloor}>Add</button>
           </div>
-          <select value={activeFloor.id} onChange={(event) => setActiveFloorId(event.target.value)}>
+          <select value={activeFloor.id} onChange={(event) => selectFloor(event.target.value)}>
             {model.floors.map((floor) => (
               <option key={floor.id} value={floor.id}>
                 {floor.name} ({floor.elevation} cm)
@@ -395,20 +445,6 @@ export function App() {
               />
               <strong>{formatTimeMinutes(sunStudy.timeMinutes)}</strong>
             </label>
-            <label>
-              <span>Model North</span>
-              <input
-                type="range"
-                min="0"
-                max="359"
-                step="1"
-                value={sunStudy.modelNorthDegrees}
-                onChange={(event) =>
-                  setSunStudy((current) => ({ ...current, modelNorthDegrees: Number(event.target.value) }))
-                }
-              />
-              <strong>{sunStudy.modelNorthDegrees} deg</strong>
-            </label>
           </div>
           <div className="toolbar small">
             <button onClick={() => setSunStudy((current) => ({ ...current, date: `${current.date.slice(0, 4)}-03-20` }))}>
@@ -452,37 +488,65 @@ export function App() {
       </aside>
 
       <section className="workspace">
-        <div className="view-card large">
+        <div className="view-card workspace-card">
           <div className="view-header">
-            <h2>3D Wire Model</h2>
-            <span>{showAllFloors ? `${activeFloor.name} with sun study` : `${activeFloor.name} with sun study`}</span>
+            <div className="workspace-view-switcher" role="tablist" aria-label="Workspace Views">
+              <button
+                type="button"
+                className={activePane === "3d" ? "active" : ""}
+                aria-selected={activePane === "3d"}
+                onClick={() => setActivePane("3d")}
+              >
+                3D View
+              </button>
+              {model.floors.map((floor) => (
+                <button
+                  key={floor.id}
+                  type="button"
+                  className={activePane === floor.id ? "active" : ""}
+                  aria-selected={activePane === floor.id}
+                  onClick={() => {
+                    setActiveFloorId(floor.id);
+                    setActivePane(floor.id);
+                  }}
+                >
+                  {floor.name}
+                </button>
+              ))}
+            </div>
+            <span>
+              {activePane === "3d"
+                ? `${activeFloor.name} in 3D`
+                : activePaneFloor
+                  ? `${activePaneFloor.name} in 2D`
+                  : "View"}
+            </span>
           </div>
-          <div className="mobile-scene-toolbar">
-            <button onClick={() => setMobileControlsOpen((current) => !current)}>
-              {mobileControlsOpen ? "Hide Controls" : "Show Controls"}
-            </button>
-            <button onClick={() => setControlMode((current) => !current)}>
-              {controlMode ? "Exit 3D Controls" : "Enter 3D Controls"}
-            </button>
-          </div>
-          <Scene3D
-            model={model}
-            activeFloorId={activeFloor.id}
-            showAllFloors={showAllFloors}
-            wireframe={wireframe}
-            sunStudy={sunStudy}
-            interactionEnabled={sceneInteractionEnabled}
-          />
-        </div>
-
-        <div className="view-card plans-card">
-          <div className="view-header">
-            <h2>2D Plans</h2>
-            <span>{model.floors.length} floors</span>
-          </div>
-          <div className="plans-stack">
+          <div className="workspace-pane-stage">
+            <section className={`workspace-pane ${activePane === "3d" ? "active" : ""}`} aria-hidden={activePane !== "3d"}>
+              <div className="mobile-scene-toolbar">
+                <button onClick={() => setMobileControlsOpen((current) => !current)}>
+                  {mobileControlsOpen ? "Hide Controls" : "Show Controls"}
+                </button>
+                <button onClick={() => setControlMode((current) => !current)}>
+                  {controlMode ? "Exit 3D Controls" : "Enter 3D Controls"}
+                </button>
+              </div>
+              <Scene3D
+                model={model}
+                activeFloorId={activeFloor.id}
+                showAllFloors={showAllFloors}
+                wireframe={wireframe}
+                sunStudy={sunStudy}
+                interactionEnabled={sceneInteractionEnabled}
+              />
+            </section>
             {model.floors.map((floor) => (
-              <section className="plan-section" key={floor.id}>
+              <section
+                className={`workspace-pane ${activePane === floor.id ? "active" : ""}`}
+                key={floor.id}
+                aria-hidden={activePane !== floor.id}
+              >
                 <div className="plan-section-header">
                   <h3>{floor.name}</h3>
                   <span>{floor.elevation} cm elevation</span>

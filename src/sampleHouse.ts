@@ -280,6 +280,7 @@ export const sampleHouse: HouseModel = {
           to: { x: 980, y: 700 },
           height: 270,
           baseElevation: 90,
+          renderFoundation: false,
           thickness: 30,
           thicknessSide: "center",
           color: "#6d7785",
@@ -301,6 +302,7 @@ export const sampleHouse: HouseModel = {
           to: { x: 755, y: 915 },
           height: 270,
           baseElevation: 90,
+          renderFoundation: false,
           thickness: 30,
           thicknessSide: "center",
           color: "#6d7785",
@@ -312,6 +314,7 @@ export const sampleHouse: HouseModel = {
           to: { x: 995, y: 715 },
           height: 270,
           baseElevation: 90,
+          renderFoundation: false,
           thickness: 30,
           thicknessSide: "center",
           color: "#6d7785",
@@ -452,6 +455,7 @@ export const sampleHouse: HouseModel = {
           to: { x: 770, y: 700 },
           height: 270,
           baseElevation: 90,
+          renderFoundation: false,
           thickness: 30,
           thicknessSide: "center",
           color: "#6d7785",
@@ -463,6 +467,7 @@ export const sampleHouse: HouseModel = {
           to: { x: 755, y: 715 },
           height: 270,
           baseElevation: 90,
+          renderFoundation: false,
           thickness: 30,
           thicknessSide: "center",
           color: "#6d7785",
@@ -484,6 +489,7 @@ export const sampleHouse: HouseModel = {
           to: { x: 495, y: 590 },
           height: 270,
           baseElevation: 90,
+          renderFoundation: false,
           thickness: 20,
           thicknessSide: "center",
           color: "#6d7785",
@@ -495,6 +501,7 @@ export const sampleHouse: HouseModel = {
           to: { x: 565, y: 580 },
           height: 270,
           baseElevation: 90,
+          renderFoundation: false,
           thickness: 20,
           thicknessSide: "center",
           color: "#6d7785",
@@ -506,9 +513,32 @@ export const sampleHouse: HouseModel = {
           to: { x: 555, y: 715 },
           height: 270,
           baseElevation: 90,
+          renderFoundation: false,
           thickness: 20,
           thicknessSide: "center",
           color: "#6d7785",
+        },
+        {
+          id: "w37",
+          name: "Interior wall C-B' near axis 4 door",
+          from: { x: 1122, y: 715 },
+          to: { x: 1122, y: 915 },
+          height: 270,
+          baseElevation: 90,
+          renderFoundation: false,
+          thickness: 24,
+          thicknessSide: "center",
+          color: "#6d7785",
+          openings: [
+            {
+              id: "door-w37-1",
+              type: "door",
+              offset: 15,
+              length: 90,
+              baseHeight: 0,
+              height: 230,
+            },
+          ],
         },
       ],
       spaces: [
@@ -569,6 +599,7 @@ export const sampleHouse: HouseModel = {
           position: { x: pillar.x, y: pillar.y, z: 0 },
           size: { x: 30, y: 30, z: pillar.height },
           baseElevation: 0,
+          renderFoundation: !["p7", "p9", "p10"].includes(pillar.id),
           category: "structural" as const,
           color: structuralPillarColor,
         })),
@@ -704,19 +735,7 @@ function normalizeGroundFloor(floor: Floor) {
     pillarObject.size.z = topElevation - baseElevation;
   });
 
-  const p13 = pillarObjects.get("p13");
-  if (p13) {
-    p13.baseElevation = 90;
-    p13.size.z = 270;
-  }
-
-  const p16 = pillarObjects.get("p16");
-  if (p16) {
-    p16.baseElevation = 90;
-    p16.size.z = 270;
-  }
-
-  ["p7", "p9", "p10"].forEach((pillarId) => {
+  ["p7", "p9", "p10", "p13", "p16"].forEach((pillarId) => {
     const pillar = pillarObjects.get(pillarId);
     if (!pillar) return;
     pillar.baseElevation = 90;
