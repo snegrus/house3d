@@ -229,7 +229,7 @@ export function Scene3D({ model, activeFloorId, showAllFloors, wireframe, sunStu
         });
         shape.closePath();
         const geometry = new THREE.ShapeGeometry(shape);
-        const mesh = new THREE.Mesh(geometry, materialFor(space.color ?? "#e8eef7", 0.62, true));
+        const mesh = new THREE.Mesh(geometry, materialFor(space.color ?? "#e8eef7", wireframe ? 0.62 : 1, true));
         mesh.rotation.x = Math.PI / 2;
         mesh.position.y = floorY + (space.baseElevation ?? 0) * CM_TO_M + 0.01;
         mesh.receiveShadow = true;

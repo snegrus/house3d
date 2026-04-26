@@ -245,7 +245,7 @@ textarea {
 .workspace {
   display: grid;
   gap: 14px;
-  grid-template-rows: minmax(360px, 0.9fr) minmax(520px, 1.3fr);
+  grid-template-rows: minmax(520px, 1.2fr) minmax(420px, 1fr);
   max-height: 100vh;
   overflow: hidden;
   padding: 14px;
@@ -256,6 +256,10 @@ textarea {
   flex-direction: column;
   min-height: 0;
   overflow: hidden;
+}
+
+.view-card.large {
+  min-height: 560px;
 }
 
 .view-header {
@@ -498,5 +502,15 @@ textarea {
 
   .app-shell.control-mode .sidebar {
     transform: translateY(100%);
+  }
+}
+
+@media (min-width: 1280px) {
+  .workspace {
+    grid-template-rows: minmax(620px, 1.35fr) minmax(360px, 0.85fr);
+  }
+
+  .view-card.large {
+    min-height: 660px;
   }
 }

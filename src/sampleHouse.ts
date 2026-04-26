@@ -262,6 +262,16 @@ export const sampleHouse: HouseModel = {
           thickness: 30,
           thicknessSide: "center",
           color: "#6d7785",
+          openings: [
+            {
+              id: "door-w22-1",
+              type: "door",
+              offset: 300,
+              length: 90,
+              baseHeight: 0,
+              height: 230,
+            },
+          ],
         },
         {
           id: "w23",
@@ -273,6 +283,16 @@ export const sampleHouse: HouseModel = {
           thickness: 30,
           thicknessSide: "center",
           color: "#6d7785",
+          openings: [
+            {
+              id: "door-w23-1",
+              type: "door",
+              offset: 300,
+              length: 90,
+              baseHeight: 0,
+              height: 230,
+            },
+          ],
         },
         {
           id: "w24",
@@ -446,6 +466,16 @@ export const sampleHouse: HouseModel = {
           thickness: 30,
           thicknessSide: "center",
           color: "#6d7785",
+          openings: [
+            {
+              id: "door-w32-1",
+              type: "door",
+              offset: 267,
+              length: 90,
+              baseHeight: 0,
+              height: 230,
+            },
+          ],
         },
         {
           id: "w34",
