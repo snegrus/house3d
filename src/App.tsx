@@ -167,7 +167,32 @@ export function App() {
     return () => mediaQuery.removeEventListener("change", sync);
   }, []);
 
+  useEffect(() => {
+    if (!isMobileLayout || !mobileControlsOpen || !controlMode) return;
+    setMobileControlsOpen(false);
+  }, [controlMode, isMobileLayout, mobileControlsOpen]);
+
   const sceneInteractionEnabled = !isMobileLayout || controlMode;
+
+  const toggleMobileControls = () => {
+    setMobileControlsOpen((current) => {
+      const next = !current;
+      if (next) {
+        setControlMode(false);
+      }
+      return next;
+    });
+  };
+
+  const toggleControlMode = () => {
+    setControlMode((current) => {
+      const next = !current;
+      if (next) {
+        setMobileControlsOpen(false);
+      }
+      return next;
+    });
+  };
 
   const selectFloor = (floorId: string) => {
     setActiveFloorId(floorId);
@@ -522,16 +547,18 @@ export function App() {
                   : "View"}
             </span>
           </div>
+          {activePane === "3d" ? (
+            <div className="mobile-scene-toolbar">
+              <button onClick={toggleMobileControls}>
+                {mobileControlsOpen ? "Hide Controls" : "Show Controls"}
+              </button>
+              <button onClick={toggleControlMode}>
+                {controlMode ? "Exit 3D Controls" : "Enter 3D Controls"}
+              </button>
+            </div>
+          ) : null}
           <div className="workspace-pane-stage">
             <section className={`workspace-pane ${activePane === "3d" ? "active" : ""}`} aria-hidden={activePane !== "3d"}>
-              <div className="mobile-scene-toolbar">
-                <button onClick={() => setMobileControlsOpen((current) => !current)}>
-                  {mobileControlsOpen ? "Hide Controls" : "Show Controls"}
-                </button>
-                <button onClick={() => setControlMode((current) => !current)}>
-                  {controlMode ? "Exit 3D Controls" : "Enter 3D Controls"}
-                </button>
-              </div>
               <Scene3D
                 model={model}
                 activeFloorId={activeFloor.id}

@@ -524,11 +524,7 @@ textarea {
   .mobile-scene-toolbar {
     display: flex;
     gap: 8px;
-    left: 12px;
-    position: absolute;
-    right: 12px;
-    top: 54px;
-    z-index: 15;
+    padding: 10px 12px 0;
   }
 
   .mobile-scene-toolbar button {
