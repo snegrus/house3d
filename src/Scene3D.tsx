@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
-import type { Floor, HouseModel, Space, Wall } from "./model";
+import type { Floor, HouseModel, Space, Vec2, Wall } from "./model";
 import {
   getFloorBounds,
   getModelBounds,
@@ -146,14 +146,6 @@ export function Scene3D({ model, activeFloorId, showAllFloors, wireframe, sunStu
       color: "#42515d",
       depthTest: true,
     });
-    const ceilingMaterial = new THREE.MeshLambertMaterial({
-      color: "#d6dbe2",
-      transparent: true,
-      opacity: 0,
-    });
-    ceilingMaterial.colorWrite = false;
-    ceilingMaterial.depthWrite = false;
-
     const floors = showAllFloors ? model.floors : model.floors.filter((floor) => floor.id === activeFloorId);
     const sunPath = getSunPath(sunStudy);
     const sunDistance = Math.max(largest * 1.3, 8);
@@ -244,7 +236,6 @@ export function Scene3D({ model, activeFloorId, showAllFloors, wireframe, sunStu
         mesh.position.y = floorY + (space.baseElevation ?? 0) * CM_TO_M + 0.01;
         mesh.receiveShadow = true;
         scene.add(mesh);
-        addCeiling(scene, floor, space, ceilingMaterial);
       });
 
       floor.walls.forEach((wall) => {
@@ -320,6 +311,18 @@ export function Scene3D({ model, activeFloorId, showAllFloors, wireframe, sunStu
       });
 
       floor.objects.forEach((object) => {
+        if (object.type === "slab") {
+          addStructuralSlab(
+            scene,
+            floorY,
+            object.boundary,
+            object.baseElevation,
+            object.thickness,
+            materialFor(object.color ?? "#6d7785", wireframe ? 1 : 0.72),
+          );
+          return;
+        }
+
         const geometry = new THREE.BoxGeometry(
           object.size.x * CM_TO_M,
           object.size.z * CM_TO_M,
@@ -460,7 +463,6 @@ export function Scene3D({ model, activeFloorId, showAllFloors, wireframe, sunStu
       windowGlassMaterial.dispose();
       doorGlassMaterial.dispose();
       windowFrameMaterial.dispose();
-      ceilingMaterial.dispose();
       scene.traverse((item) => {
         if (item instanceof THREE.Mesh) {
           item.geometry.dispose();
@@ -592,8 +594,12 @@ function addWallBox(
 }
 
 function buildSpaceShapeGeometry(space: Space) {
+  return buildShapeGeometry(space.boundary);
+}
+
+function buildShapeGeometry(boundary: Vec2[]) {
   const shape = new THREE.Shape();
-  space.boundary.forEach((point, index) => {
+  boundary.forEach((point, index) => {
     const x = point.x * CM_TO_M;
     const y = point.y * CM_TO_M;
     if (index === 0) shape.moveTo(x, y);
@@ -603,13 +609,29 @@ function buildSpaceShapeGeometry(space: Space) {
   return new THREE.ShapeGeometry(shape);
 }
 
-function addCeiling(scene: THREE.Scene, floor: Floor, space: Space, material: THREE.Material) {
-  const geometry = buildSpaceShapeGeometry(space);
+function addStructuralSlab(
+  scene: THREE.Scene,
+  floorY: number,
+  boundary: Vec2[],
+  baseElevation: number,
+  thickness: number,
+  material: THREE.Material,
+) {
+  const shape = new THREE.Shape();
+  boundary.forEach((point, index) => {
+    const x = point.x * CM_TO_M;
+    const y = point.y * CM_TO_M;
+    if (index === 0) shape.moveTo(x, y);
+    else shape.lineTo(x, y);
+  });
+  shape.closePath();
+  const geometry = new THREE.ExtrudeGeometry(shape, {
+    depth: thickness * CM_TO_M,
+    bevelEnabled: false,
+  });
   const mesh = new THREE.Mesh(geometry, material);
   mesh.rotation.x = Math.PI / 2;
-  const floorY = floor.elevation * CM_TO_M;
-  mesh.position.y =
-    floorY + ((space.baseElevation ?? 0) + floor.defaultWallHeight) * CM_TO_M - 0.01;
+  mesh.position.y = floorY + (baseElevation + thickness) * CM_TO_M;
   mesh.castShadow = true;
   mesh.receiveShadow = true;
   scene.add(mesh);

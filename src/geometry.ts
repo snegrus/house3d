@@ -43,8 +43,12 @@ export function getFloorBounds(floor: Floor): Bounds {
   floor.axes?.vertical.forEach((axis) => include(axisCoordinate(axis), 0));
   floor.axes?.horizontal.forEach((axis) => include(0, axisCoordinate(axis)));
   floor.objects.forEach((object) => {
-    include(object.position.x - object.size.x / 2, object.position.y - object.size.y / 2);
-    include(object.position.x + object.size.x / 2, object.position.y + object.size.y / 2);
+    if (object.type === "box") {
+      include(object.position.x - object.size.x / 2, object.position.y - object.size.y / 2);
+      include(object.position.x + object.size.x / 2, object.position.y + object.size.y / 2);
+      return;
+    }
+    object.boundary.forEach((point) => include(point.x, point.y));
   });
 
   if (!Number.isFinite(minX)) {
@@ -107,8 +111,8 @@ export function getCoordinateAnchors(floor: Floor): CoordinateAnchor[] {
       })),
     ),
     ...floor.objects.map((object) => ({
-      x: object.position.x,
-      y: object.position.y,
+      x: object.type === "box" ? object.position.x : averageCoordinate(object.boundary, "x"),
+      y: object.type === "box" ? object.position.y : averageCoordinate(object.boundary, "y"),
       id: `${object.id}-center`,
       label: object.id,
     })),
@@ -282,4 +286,9 @@ function offsetPoint(point: Vec2, normal: Vec2, amount: number): Vec2 {
     x: point.x + normal.x * amount,
     y: point.y + normal.y * amount,
   };
+}
+
+function averageCoordinate(points: Vec2[], axis: "x" | "y") {
+  if (points.length === 0) return 0;
+  return points.reduce((sum, point) => sum + point[axis], 0) / points.length;
 }

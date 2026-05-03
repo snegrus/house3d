@@ -49,7 +49,7 @@ export type Space = {
   color?: string;
 };
 
-export type HouseObject = {
+export type BoxHouseObject = {
   id: string;
   name: string;
   type: "box";
@@ -61,6 +61,19 @@ export type HouseObject = {
   color?: string;
   category?: "furniture" | "appliance" | "fixture" | "storage" | "structural" | "custom";
 };
+
+export type SlabHouseObject = {
+  id: string;
+  name: string;
+  type: "slab";
+  boundary: Vec2[];
+  thickness: number;
+  baseElevation: number;
+  color?: string;
+  category?: "structural" | "custom";
+};
+
+export type HouseObject = BoxHouseObject | SlabHouseObject;
 
 export type Floor = {
   id: string;
@@ -263,20 +276,33 @@ export function validateHouseModel(value: unknown): ValidationIssue[] {
     floor.objects?.forEach((object, objectIndex) => {
       const path = `${floorPath}.objects[${objectIndex}]`;
       checkId(object.id, `${path}.id`, childIds);
-      if (object.type !== "box") {
-        issues.push({ path: `${path}.type`, message: "Only box objects are supported for now." });
-      }
-      if (!isVec3(object.position)) {
-        issues.push({ path: `${path}.position`, message: "Object position must have x, y, and z." });
-      }
-      if (!isVec3(object.size) || object.size.x <= 0 || object.size.y <= 0 || object.size.z <= 0) {
-        issues.push({ path: `${path}.size`, message: "Object size must have positive x, y, and z." });
-      }
-      if (object.baseElevation !== undefined && (!isNumber(object.baseElevation) || object.baseElevation < 0)) {
-        issues.push({ path: `${path}.baseElevation`, message: "Object base elevation must be zero or positive." });
-      }
-      if (object.renderFoundation !== undefined && typeof object.renderFoundation !== "boolean") {
-        issues.push({ path: `${path}.renderFoundation`, message: "Object renderFoundation must be a boolean." });
+      if (object.type === "box") {
+        if (!isVec3(object.position)) {
+          issues.push({ path: `${path}.position`, message: "Object position must have x, y, and z." });
+        }
+        if (!isVec3(object.size) || object.size.x <= 0 || object.size.y <= 0 || object.size.z <= 0) {
+          issues.push({ path: `${path}.size`, message: "Object size must have positive x, y, and z." });
+        }
+        if (object.baseElevation !== undefined && (!isNumber(object.baseElevation) || object.baseElevation < 0)) {
+          issues.push({ path: `${path}.baseElevation`, message: "Object base elevation must be zero or positive." });
+        }
+        if (object.renderFoundation !== undefined && typeof object.renderFoundation !== "boolean") {
+          issues.push({ path: `${path}.renderFoundation`, message: "Object renderFoundation must be a boolean." });
+        }
+      } else if (object.type === "slab") {
+        if (!Array.isArray(object.boundary) || object.boundary.length < 3) {
+          issues.push({ path: `${path}.boundary`, message: "Slab needs at least three boundary points." });
+        } else if (!object.boundary.every(isVec2)) {
+          issues.push({ path: `${path}.boundary`, message: "Each slab boundary point must have x and y." });
+        }
+        if (!isNumber(object.thickness) || object.thickness <= 0) {
+          issues.push({ path: `${path}.thickness`, message: "Slab thickness must be positive." });
+        }
+        if (!isNumber(object.baseElevation)) {
+          issues.push({ path: `${path}.baseElevation`, message: "Slab base elevation must be a number." });
+        }
+      } else {
+        issues.push({ path: `${path}.type`, message: "Only box and slab objects are supported." });
       }
     });
   });
