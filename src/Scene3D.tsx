@@ -90,10 +90,11 @@ export function Scene3D({ model, activeFloorId, showAllFloors, wireframe, sunStu
 
     const sunPosition = getSunPosition(sunStudy);
     const isDaylight = sunPosition.altitudeDegrees > 0;
+    const sunColors = getSunColors(sunPosition.altitudeDegrees, sunPosition.azimuthDegrees);
     scene.background = new THREE.Color(isDaylight ? "#f7f8fa" : "#18202b");
 
     scene.add(new THREE.AmbientLight(isDaylight ? "#ffffff" : "#8ea0b8", isDaylight ? 0.52 : 0.2));
-    const sunLight = new THREE.DirectionalLight("#fff2c7", 1.05);
+    const sunLight = new THREE.DirectionalLight(sunColors.light, 1.05);
     scene.add(sunLight);
 
     const materialCache = new Map<string, THREE.MeshLambertMaterial>();
@@ -122,11 +123,11 @@ export function Scene3D({ model, activeFloorId, showAllFloors, wireframe, sunStu
       depthTest: true,
     });
     const sunPathMaterial = new THREE.LineBasicMaterial({
-      color: "#c6902f",
+      color: sunColors.path,
       transparent: true,
       opacity: 0.9,
     });
-    const sunMarkerMaterial = new THREE.MeshBasicMaterial({ color: "#f2b53d" });
+    const sunMarkerMaterial = new THREE.MeshBasicMaterial({ color: sunColors.marker });
     const windowGlassMaterial = new THREE.MeshPhongMaterial({
       color: "#90b7cf",
       transparent: true,
@@ -612,6 +613,47 @@ function addCeiling(scene: THREE.Scene, floor: Floor, space: Space, material: TH
   mesh.castShadow = true;
   mesh.receiveShadow = true;
   scene.add(mesh);
+}
+
+function getSunColors(altitudeDegrees: number, azimuthDegrees: number) {
+  const horizonBlend = 1 - THREE.MathUtils.clamp(altitudeDegrees / 18, 0, 1);
+  const sunriseBlend = horizonBlend * getDirectionalBlend(azimuthDegrees, 90);
+  const sunsetBlend = horizonBlend * getDirectionalBlend(azimuthDegrees, 270);
+
+  const baseLight = new THREE.Color("#fff2c7");
+  const sunriseLight = new THREE.Color("#ffd6a5");
+  const sunsetLight = new THREE.Color("#ffb25c");
+  const baseMarker = new THREE.Color("#f2c14c");
+  const sunriseMarker = new THREE.Color("#ffbf75");
+  const sunsetMarker = new THREE.Color("#ff8e3c");
+  const basePath = new THREE.Color("#c6902f");
+  const sunrisePath = new THREE.Color("#dba14f");
+  const sunsetPath = new THREE.Color("#db7d2b");
+
+  return {
+    light: blendSunColor(baseLight, sunriseLight, sunsetLight, sunriseBlend, sunsetBlend),
+    marker: blendSunColor(baseMarker, sunriseMarker, sunsetMarker, sunriseBlend, sunsetBlend),
+    path: blendSunColor(basePath, sunrisePath, sunsetPath, sunriseBlend, sunsetBlend),
+  };
+}
+
+function blendSunColor(
+  base: THREE.Color,
+  sunrise: THREE.Color,
+  sunset: THREE.Color,
+  sunriseBlend: number,
+  sunsetBlend: number,
+) {
+  return base
+    .clone()
+    .lerp(sunrise, THREE.MathUtils.clamp(sunriseBlend, 0, 1))
+    .lerp(sunset, THREE.MathUtils.clamp(sunsetBlend, 0, 1))
+    .getHexString();
+}
+
+function getDirectionalBlend(azimuthDegrees: number, targetDegrees: number) {
+  const delta = Math.abs((((azimuthDegrees - targetDegrees) % 360) + 540) % 360 - 180);
+  return 1 - THREE.MathUtils.clamp(delta / 90, 0, 1);
 }
 
 function roundedRect(context: CanvasRenderingContext2D, x: number, y: number, width: number, height: number, radius: number) {
