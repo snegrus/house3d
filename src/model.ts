@@ -49,6 +49,9 @@ export type Space = {
   color?: string;
 };
 
+export type ObjectKind = "pillar" | "platform" | "step" | "vehicle" | "roof";
+export type ObjectRenderStyle = "default" | "solid";
+
 export type BoxHouseObject = {
   id: string;
   name: string;
@@ -59,6 +62,9 @@ export type BoxHouseObject = {
   renderFoundation?: boolean;
   rotationZ?: number;
   color?: string;
+  objectKind?: ObjectKind;
+  renderStyle?: ObjectRenderStyle;
+  showLabel?: boolean;
   category?: "furniture" | "appliance" | "fixture" | "storage" | "structural" | "custom";
 };
 
@@ -70,10 +76,30 @@ export type SlabHouseObject = {
   thickness: number;
   baseElevation: number;
   color?: string;
+  objectKind?: ObjectKind;
+  renderStyle?: ObjectRenderStyle;
+  showLabel?: boolean;
   category?: "structural" | "custom";
 };
 
-export type HouseObject = BoxHouseObject | SlabHouseObject;
+export type ShedRoofHouseObject = {
+  id: string;
+  name: string;
+  type: "shedRoof";
+  position: Vec3;
+  size: Vec3;
+  baseElevation: number;
+  rise: number;
+  slopeDirection: "x+" | "x-" | "y+" | "y-";
+  rotationZ?: number;
+  color?: string;
+  objectKind?: ObjectKind;
+  renderStyle?: ObjectRenderStyle;
+  showLabel?: boolean;
+  category?: "structural" | "custom";
+};
+
+export type HouseObject = BoxHouseObject | SlabHouseObject | ShedRoofHouseObject;
 
 export type Floor = {
   id: string;
@@ -301,8 +327,59 @@ export function validateHouseModel(value: unknown): ValidationIssue[] {
         if (!isNumber(object.baseElevation)) {
           issues.push({ path: `${path}.baseElevation`, message: "Slab base elevation must be a number." });
         }
+      } else if (object.type === "shedRoof") {
+        if (!isVec3(object.position)) {
+          issues.push({ path: `${path}.position`, message: "Roof position must have x, y, and z." });
+        }
+        if (!isVec3(object.size) || object.size.x <= 0 || object.size.y <= 0 || object.size.z <= 0) {
+          issues.push({ path: `${path}.size`, message: "Roof size must have positive x, y, and z." });
+        }
+        if (!isNumber(object.baseElevation) || object.baseElevation < 0) {
+          issues.push({ path: `${path}.baseElevation`, message: "Roof base elevation must be zero or positive." });
+        }
+        if (!isNumber(object.rise) || object.rise < 0) {
+          issues.push({ path: `${path}.rise`, message: "Roof rise must be zero or positive." });
+        }
+        if (
+          object.slopeDirection !== "x+" &&
+          object.slopeDirection !== "x-" &&
+          object.slopeDirection !== "y+" &&
+          object.slopeDirection !== "y-"
+        ) {
+          issues.push({
+            path: `${path}.slopeDirection`,
+            message: "Roof slope direction must be x+, x-, y+, or y-.",
+          });
+        }
       } else {
-        issues.push({ path: `${path}.type`, message: "Only box and slab objects are supported." });
+        issues.push({ path: `${path}.type`, message: "Only box, slab, and shedRoof objects are supported." });
+      }
+
+      if (
+        object.objectKind !== undefined &&
+        object.objectKind !== "pillar" &&
+        object.objectKind !== "platform" &&
+        object.objectKind !== "step" &&
+        object.objectKind !== "vehicle" &&
+        object.objectKind !== "roof"
+      ) {
+        issues.push({
+          path: `${path}.objectKind`,
+          message: "Object kind must be pillar, platform, step, vehicle, or roof.",
+        });
+      }
+      if (
+        object.renderStyle !== undefined &&
+        object.renderStyle !== "default" &&
+        object.renderStyle !== "solid"
+      ) {
+        issues.push({
+          path: `${path}.renderStyle`,
+          message: "Object render style must be default or solid.",
+        });
+      }
+      if (object.showLabel !== undefined && typeof object.showLabel !== "boolean") {
+        issues.push({ path: `${path}.showLabel`, message: "Object showLabel must be a boolean." });
       }
     });
   });

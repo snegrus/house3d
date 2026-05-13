@@ -122,13 +122,21 @@ function getInitialPaneFromUrl(): WorkspacePane {
   return pane && pane.length > 0 ? pane : "3d";
 }
 
+function getInitialWireframeFromUrl() {
+  if (typeof window === "undefined") return true;
+  const value = new URLSearchParams(window.location.search).get("wireframe")?.trim().toLowerCase();
+  if (value === "0" || value === "false") return false;
+  if (value === "1" || value === "true") return true;
+  return true;
+}
+
 export function App() {
   const [model, setModel] = useState(loadInitialModel);
   const [jsonText, setJsonText] = useState(() => JSON.stringify(loadInitialModel(), null, 2));
   const [activeFloorId, setActiveFloorId] = useState(() => loadInitialModel().floors[0]?.id ?? "");
   const [activePane, setActivePane] = useState<WorkspacePane>(getInitialPaneFromUrl);
   const [jsonError, setJsonError] = useState("");
-  const [wireframe, setWireframe] = useState(true);
+  const [wireframe, setWireframe] = useState(getInitialWireframeFromUrl);
   const [showAllFloors, setShowAllFloors] = useState(true);
   const [mobileControlsOpen, setMobileControlsOpen] = useState(false);
   const [controlMode, setControlMode] = useState(false);
@@ -227,6 +235,13 @@ export function App() {
     }
     window.history.replaceState({}, "", `${url.pathname}${url.search}${url.hash}`);
   }, [activePane]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const url = new URL(window.location.href);
+    url.searchParams.set("wireframe", wireframe ? "1" : "0");
+    window.history.replaceState({}, "", `${url.pathname}${url.search}${url.hash}`);
+  }, [wireframe]);
 
   const commitModel = (next: HouseModel) => {
     setModel(next);

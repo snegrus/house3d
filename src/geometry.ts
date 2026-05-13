@@ -1,4 +1,4 @@
-import type { AxisDefinition, Floor, HouseModel, Vec2, Wall, WallOpening } from "./model";
+import type { AxisDefinition, Floor, HouseModel, HouseObject, Vec2, Wall, WallOpening } from "./model";
 
 export type Bounds = {
   minX: number;
@@ -43,12 +43,7 @@ export function getFloorBounds(floor: Floor): Bounds {
   floor.axes?.vertical.forEach((axis) => include(axisCoordinate(axis), 0));
   floor.axes?.horizontal.forEach((axis) => include(0, axisCoordinate(axis)));
   floor.objects.forEach((object) => {
-    if (object.type === "box") {
-      include(object.position.x - object.size.x / 2, object.position.y - object.size.y / 2);
-      include(object.position.x + object.size.x / 2, object.position.y + object.size.y / 2);
-      return;
-    }
-    object.boundary.forEach((point) => include(point.x, point.y));
+    getObjectFootprint(object).forEach((point) => include(point.x, point.y));
   });
 
   if (!Number.isFinite(minX)) {
@@ -111,8 +106,7 @@ export function getCoordinateAnchors(floor: Floor): CoordinateAnchor[] {
       })),
     ),
     ...floor.objects.map((object) => ({
-      x: object.type === "box" ? object.position.x : averageCoordinate(object.boundary, "x"),
-      y: object.type === "box" ? object.position.y : averageCoordinate(object.boundary, "y"),
+      ...getObjectCenter(object),
       id: `${object.id}-center`,
       label: object.id,
     })),
@@ -279,6 +273,31 @@ export function wallOpeningSegment(wall: Wall, opening: WallOpening): [Vec2, Vec
     pointAlongWall(wall, opening.offset),
     pointAlongWall(wall, opening.offset + opening.length),
   ];
+}
+
+export function getObjectFootprint(object: HouseObject): Vec2[] {
+  if (object.type === "slab") return object.boundary;
+
+  return [
+    { x: object.position.x - object.size.x / 2, y: object.position.y - object.size.y / 2 },
+    { x: object.position.x + object.size.x / 2, y: object.position.y - object.size.y / 2 },
+    { x: object.position.x + object.size.x / 2, y: object.position.y + object.size.y / 2 },
+    { x: object.position.x - object.size.x / 2, y: object.position.y + object.size.y / 2 },
+  ];
+}
+
+export function getObjectCenter(object: HouseObject): Vec2 {
+  if (object.type === "slab") {
+    return {
+      x: averageCoordinate(object.boundary, "x"),
+      y: averageCoordinate(object.boundary, "y"),
+    };
+  }
+
+  return {
+    x: object.position.x,
+    y: object.position.y,
+  };
 }
 
 function offsetPoint(point: Vec2, normal: Vec2, amount: number): Vec2 {

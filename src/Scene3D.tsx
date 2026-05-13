@@ -10,7 +10,7 @@ import {
   wallMetrics,
   wallNormal,
 } from "./geometry";
-import { isPillar, isSolidStructuralStep } from "./houseObjects";
+import { isPillarObject, isSolidObject, shouldShowObjectLabel } from "./houseObjects";
 import { getSunPath, getSunPosition, type SunStudySettings } from "./solar";
 
 type Scene3DProps = {
@@ -25,7 +25,6 @@ type Scene3DProps = {
 type WallMetrics = ReturnType<typeof wallMetrics>;
 
 const CM_TO_M = 0.01;
-const isForceSolidObject = (id: string) => isSolidStructuralStep(id) || isPillar(id);
 const GRID_EXTENT_MULTIPLIER = 4;
 const MIN_GRID_EXTENT_M = 22;
 const AXIS_PADDING_CM = 190;
@@ -323,6 +322,29 @@ export function Scene3D({ model, activeFloorId, showAllFloors, wireframe, sunStu
           return;
         }
 
+        if (object.type === "shedRoof") {
+          const mesh = new THREE.Mesh(
+            buildShedRoofGeometry(
+              object.size.x * CM_TO_M,
+              object.size.y * CM_TO_M,
+              object.size.z * CM_TO_M,
+              object.rise * CM_TO_M,
+              object.slopeDirection,
+            ),
+            materialFor(object.color ?? "#7a838f", wireframe ? 1 : 0.9),
+          );
+          mesh.position.set(
+            object.position.x * CM_TO_M,
+            floorY + object.baseElevation * CM_TO_M,
+            object.position.y * CM_TO_M,
+          );
+          mesh.rotation.y = -(object.rotationZ ?? 0);
+          mesh.castShadow = true;
+          mesh.receiveShadow = true;
+          scene.add(mesh);
+          return;
+        }
+
         const geometry = new THREE.BoxGeometry(
           object.size.x * CM_TO_M,
           object.size.z * CM_TO_M,
@@ -332,7 +354,7 @@ export function Scene3D({ model, activeFloorId, showAllFloors, wireframe, sunStu
           object.baseElevation === undefined
             ? floorY + object.position.z * CM_TO_M
             : floorY + (object.baseElevation + object.size.z / 2) * CM_TO_M;
-        if (isPillar(object.id) && (object.baseElevation ?? 0) > 0 && object.renderFoundation !== false) {
+        if (isPillarObject(object) && (object.baseElevation ?? 0) > 0 && object.renderFoundation !== false) {
           const foundationHeight = (object.baseElevation ?? 0) * CM_TO_M;
           const foundationGeometry = new THREE.BoxGeometry(
             object.size.x * CM_TO_M,
@@ -349,7 +371,7 @@ export function Scene3D({ model, activeFloorId, showAllFloors, wireframe, sunStu
           foundation.receiveShadow = true;
           scene.add(foundation);
         }
-        const forceSolid = isForceSolidObject(object.id);
+        const forceSolid = isSolidObject(object);
         const mesh = new THREE.Mesh(
           geometry,
           materialFor(object.color ?? "#69788c", forceSolid || wireframe ? 1 : 0.85, forceSolid),
@@ -364,7 +386,7 @@ export function Scene3D({ model, activeFloorId, showAllFloors, wireframe, sunStu
         mesh.receiveShadow = true;
         scene.add(mesh);
 
-        if (isPillar(object.id)) {
+        if (shouldShowObjectLabel(object)) {
           const label = createTextSprite(object.id);
           label.position.set(
             object.position.x * CM_TO_M,
@@ -595,6 +617,54 @@ function addWallBox(
 
 function buildSpaceShapeGeometry(space: Space) {
   return buildShapeGeometry(space.boundary);
+}
+
+function buildShedRoofGeometry(
+  width: number,
+  length: number,
+  lowThickness: number,
+  rise: number,
+  slopeDirection: "x+" | "x-" | "y+" | "y-",
+) {
+  const halfWidth = width / 2;
+  const halfLength = length / 2;
+  const heightAt = (x: number, z: number) => {
+    if (slopeDirection === "x+") return lowThickness + ((x + halfWidth) / width) * rise;
+    if (slopeDirection === "x-") return lowThickness + ((halfWidth - x) / width) * rise;
+    if (slopeDirection === "y+") return lowThickness + ((z + halfLength) / length) * rise;
+    return lowThickness + ((halfLength - z) / length) * rise;
+  };
+
+  const vertices = [
+    [-halfWidth, 0, -halfLength],
+    [halfWidth, 0, -halfLength],
+    [halfWidth, 0, halfLength],
+    [-halfWidth, 0, halfLength],
+    [-halfWidth, heightAt(-halfWidth, -halfLength), -halfLength],
+    [halfWidth, heightAt(halfWidth, -halfLength), -halfLength],
+    [halfWidth, heightAt(halfWidth, halfLength), halfLength],
+    [-halfWidth, heightAt(-halfWidth, halfLength), halfLength],
+  ];
+  const indices = [
+    0, 2, 1,
+    0, 3, 2,
+    4, 5, 6,
+    4, 6, 7,
+    0, 1, 5,
+    0, 5, 4,
+    1, 2, 6,
+    1, 6, 5,
+    2, 3, 7,
+    2, 7, 6,
+    3, 0, 4,
+    3, 4, 7,
+  ];
+
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute("position", new THREE.Float32BufferAttribute(vertices.flat(), 3));
+  geometry.setIndex(indices);
+  geometry.computeVertexNormals();
+  return geometry;
 }
 
 function buildShapeGeometry(boundary: Vec2[]) {

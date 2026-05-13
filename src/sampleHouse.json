@@ -1,0 +1,2676 @@
+{
+  "version": 1,
+  "units": "cm",
+  "name": "Ciurbesti House Draft",
+  "floors": [
+    {
+      "id": "ground-floor",
+      "name": "Ground Floor",
+      "elevation": 0,
+      "defaultWallHeight": 270,
+      "axes": {
+        "vertical": [
+          {
+            "coordinate": 15,
+            "label": "1"
+          },
+          {
+            "coordinate": 495,
+            "label": "2"
+          },
+          {
+            "coordinate": 755,
+            "label": "3"
+          },
+          {
+            "coordinate": 995,
+            "label": "4"
+          },
+          {
+            "coordinate": 1445,
+            "label": "5"
+          }
+        ],
+        "horizontal": [
+          {
+            "coordinate": 335,
+            "label": "D"
+          },
+          {
+            "coordinate": 700,
+            "label": "C"
+          },
+          {
+            "coordinate": 930,
+            "label": "B'"
+          },
+          {
+            "coordinate": 1215,
+            "label": "B"
+          },
+          {
+            "coordinate": 1580,
+            "label": "A"
+          }
+        ]
+      },
+      "walls": [
+        {
+          "id": "w1",
+          "name": "Axis D segment 1-2",
+          "from": {
+            "x": 30,
+            "y": 335
+          },
+          "to": {
+            "x": 480,
+            "y": 335
+          },
+          "height": 270,
+          "baseElevation": 90,
+          "thickness": 30,
+          "thicknessSide": "center",
+          "color": "#6d7785",
+          "openings": [
+            {
+              "id": "win-w1-1",
+              "type": "window",
+              "offset": 142.5,
+              "length": 150,
+              "baseHeight": 110,
+              "height": 120
+            }
+          ]
+        },
+        {
+          "id": "w2",
+          "name": "Axis D segment 2-3",
+          "from": {
+            "x": 510,
+            "y": 335
+          },
+          "to": {
+            "x": 740,
+            "y": 335
+          },
+          "height": 270,
+          "baseElevation": 90,
+          "thickness": 30,
+          "thicknessSide": "center",
+          "color": "#6d7785",
+          "openings": [
+            {
+              "id": "door-w2-1",
+              "type": "door",
+              "offset": 70,
+              "length": 90,
+              "baseHeight": 0,
+              "height": 230
+            }
+          ]
+        },
+        {
+          "id": "w3",
+          "name": "Axis D segment 3-4",
+          "from": {
+            "x": 770,
+            "y": 335
+          },
+          "to": {
+            "x": 980,
+            "y": 335
+          },
+          "height": 270,
+          "baseElevation": 90,
+          "thickness": 30,
+          "thicknessSide": "center",
+          "color": "#6d7785"
+        },
+        {
+          "id": "w4",
+          "name": "Axis D segment 4-5",
+          "from": {
+            "x": 1010,
+            "y": 335
+          },
+          "to": {
+            "x": 1430,
+            "y": 335
+          },
+          "height": 270,
+          "baseElevation": 90,
+          "thickness": 30,
+          "thicknessSide": "center",
+          "color": "#6d7785"
+        },
+        {
+          "id": "w11",
+          "name": "Axis 5 segment D-C",
+          "from": {
+            "x": 1445,
+            "y": 350
+          },
+          "to": {
+            "x": 1445,
+            "y": 685
+          },
+          "height": 270,
+          "baseElevation": 90,
+          "thickness": 30,
+          "thicknessSide": "center",
+          "color": "#6d7785",
+          "openings": [
+            {
+              "id": "win-w11-1",
+              "type": "window",
+              "offset": 85,
+              "length": 150,
+              "baseHeight": 110,
+              "height": 120
+            }
+          ]
+        },
+        {
+          "id": "w12",
+          "name": "Axis 5 segment C-B'",
+          "from": {
+            "x": 1445,
+            "y": 715
+          },
+          "to": {
+            "x": 1445,
+            "y": 915
+          },
+          "height": 270,
+          "baseElevation": 90,
+          "thickness": 30,
+          "thicknessSide": "center",
+          "color": "#6d7785",
+          "openings": [
+            {
+              "id": "win-w12-1",
+              "type": "window",
+              "offset": 20,
+              "length": 60,
+              "baseHeight": 110,
+              "height": 120
+            }
+          ]
+        },
+        {
+          "id": "w13",
+          "name": "Axis 5 segment B'-B",
+          "from": {
+            "x": 1445,
+            "y": 945
+          },
+          "to": {
+            "x": 1445,
+            "y": 1200
+          },
+          "height": 360,
+          "thickness": 30,
+          "thicknessSide": "center",
+          "color": "#6d7785",
+          "openings": [
+            {
+              "id": "win-w13-1",
+              "type": "window",
+              "offset": 160,
+              "length": 60,
+              "baseHeight": 170,
+              "height": 150
+            }
+          ]
+        },
+        {
+          "id": "w14",
+          "name": "Axis 5 segment B-A",
+          "from": {
+            "x": 1445,
+            "y": 1230
+          },
+          "to": {
+            "x": 1445,
+            "y": 1565
+          },
+          "height": 360,
+          "thickness": 30,
+          "thicknessSide": "center",
+          "color": "#6d7785",
+          "openings": [
+            {
+              "id": "win-w14-1",
+              "type": "window",
+              "offset": 195,
+              "length": 60,
+              "baseHeight": 170,
+              "height": 150
+            }
+          ]
+        },
+        {
+          "id": "w19",
+          "name": "Axis A segment 5-4",
+          "from": {
+            "x": 1430,
+            "y": 1580
+          },
+          "to": {
+            "x": 1010,
+            "y": 1580
+          },
+          "height": 360,
+          "thickness": 30,
+          "thicknessSide": "center",
+          "color": "#6d7785",
+          "openings": [
+            {
+              "id": "door-w19-1",
+              "type": "door",
+              "offset": 60,
+              "length": 300,
+              "baseHeight": 0,
+              "height": 260
+            }
+          ]
+        },
+        {
+          "id": "w20",
+          "name": "Axis 4 segment A-B",
+          "from": {
+            "x": 995,
+            "y": 1565
+          },
+          "to": {
+            "x": 995,
+            "y": 1230
+          },
+          "height": 360,
+          "thickness": 30,
+          "thicknessSide": "center",
+          "color": "#6d7785"
+        },
+        {
+          "id": "w21",
+          "name": "Axis 4 segment B-B'",
+          "from": {
+            "x": 995,
+            "y": 1200
+          },
+          "to": {
+            "x": 995,
+            "y": 945
+          },
+          "height": 270,
+          "baseElevation": 90,
+          "thickness": 30,
+          "thicknessSide": "center",
+          "color": "#6d7785"
+        },
+        {
+          "id": "w22",
+          "name": "Axis B' segment 5-4",
+          "from": {
+            "x": 1430,
+            "y": 930
+          },
+          "to": {
+            "x": 1010,
+            "y": 930
+          },
+          "height": 270,
+          "baseElevation": 90,
+          "thickness": 30,
+          "thicknessSide": "center",
+          "color": "#6d7785",
+          "openings": [
+            {
+              "id": "door-w22-1",
+              "type": "door",
+              "offset": 330,
+              "length": 90,
+              "baseHeight": 0,
+              "height": 230
+            }
+          ]
+        },
+        {
+          "id": "w23",
+          "name": "Axis C segment 5-4",
+          "from": {
+            "x": 1430,
+            "y": 700
+          },
+          "to": {
+            "x": 1010,
+            "y": 700
+          },
+          "height": 270,
+          "baseElevation": 90,
+          "renderFoundation": false,
+          "thickness": 30,
+          "thicknessSide": "center",
+          "color": "#6d7785",
+          "openings": [
+            {
+              "id": "door-w23-1",
+              "type": "door",
+              "offset": 270,
+              "length": 90,
+              "baseHeight": 0,
+              "height": 230
+            }
+          ]
+        },
+        {
+          "id": "w24",
+          "name": "Axis 3 segment B-B'",
+          "from": {
+            "x": 755,
+            "y": 1200
+          },
+          "to": {
+            "x": 755,
+            "y": 915
+          },
+          "height": 270,
+          "baseElevation": 90,
+          "renderFoundation": false,
+          "thickness": 30,
+          "thicknessSide": "center",
+          "color": "#6d7785"
+        },
+        {
+          "id": "w25",
+          "name": "Axis 4 segment D-C",
+          "from": {
+            "x": 995,
+            "y": 350
+          },
+          "to": {
+            "x": 995,
+            "y": 685
+          },
+          "height": 270,
+          "baseElevation": 90,
+          "renderFoundation": false,
+          "thickness": 30,
+          "thicknessSide": "center",
+          "color": "#6d7785"
+        },
+        {
+          "id": "w26",
+          "name": "Axis B segment 4-3",
+          "from": {
+            "x": 980,
+            "y": 1215
+          },
+          "to": {
+            "x": 770,
+            "y": 1215
+          },
+          "height": 270,
+          "baseElevation": 90,
+          "thickness": 30,
+          "thicknessSide": "center",
+          "color": "#6d7785",
+          "openings": [
+            {
+              "id": "win-w26-1",
+              "type": "window",
+              "offset": 30,
+              "length": 35,
+              "baseHeight": 0,
+              "height": 230
+            },
+            {
+              "id": "door-w26-1",
+              "type": "door",
+              "offset": 65,
+              "length": 100,
+              "baseHeight": 0,
+              "height": 230
+            },
+            {
+              "id": "win-w26-2",
+              "type": "window",
+              "offset": 165,
+              "length": 35,
+              "baseHeight": 0,
+              "height": 230
+            }
+          ]
+        },
+        {
+          "id": "w27",
+          "name": "Axis B segment 3-2",
+          "from": {
+            "x": 740,
+            "y": 1215
+          },
+          "to": {
+            "x": 510,
+            "y": 1215
+          },
+          "height": 270,
+          "baseElevation": 90,
+          "thickness": 30,
+          "thicknessSide": "center",
+          "color": "#6d7785",
+          "openings": [
+            {
+              "id": "win-w27-1",
+              "type": "window",
+              "offset": 65,
+              "length": 150,
+              "baseHeight": 45,
+              "height": 185
+            }
+          ]
+        },
+        {
+          "id": "w28",
+          "name": "Axis B segment 2-1",
+          "from": {
+            "x": 480,
+            "y": 1215
+          },
+          "to": {
+            "x": 30,
+            "y": 1215
+          },
+          "height": 270,
+          "baseElevation": 90,
+          "thickness": 30,
+          "thicknessSide": "center",
+          "color": "#6d7785",
+          "openings": [
+            {
+              "id": "win-w28-1",
+              "type": "window",
+              "offset": 225,
+              "length": 150,
+              "baseHeight": 45,
+              "height": 185
+            }
+          ]
+        },
+        {
+          "id": "w29",
+          "name": "Axis 1 segment B-C",
+          "from": {
+            "x": 15,
+            "y": 1200
+          },
+          "to": {
+            "x": 15,
+            "y": 715
+          },
+          "height": 270,
+          "baseElevation": 90,
+          "thickness": 30,
+          "thicknessSide": "center",
+          "color": "#6d7785",
+          "openings": [
+            {
+              "id": "win-w29-1",
+              "type": "window",
+              "offset": 50,
+              "length": 150,
+              "baseHeight": 45,
+              "height": 185
+            },
+            {
+              "id": "door-w29-1",
+              "type": "door",
+              "offset": 380,
+              "length": 90,
+              "baseHeight": 0,
+              "height": 230
+            }
+          ]
+        },
+        {
+          "id": "w30",
+          "name": "Axis 1 segment C-D",
+          "from": {
+            "x": 15,
+            "y": 685
+          },
+          "to": {
+            "x": 15,
+            "y": 350
+          },
+          "height": 270,
+          "baseElevation": 90,
+          "thickness": 30,
+          "thicknessSide": "center",
+          "color": "#6d7785",
+          "openings": [
+            {
+              "id": "win-w30-1",
+              "type": "window",
+              "offset": 105,
+              "length": 150,
+              "baseHeight": 110,
+              "height": 120
+            }
+          ]
+        },
+        {
+          "id": "w31",
+          "name": "Axis C segment 2-3",
+          "from": {
+            "x": 510,
+            "y": 700
+          },
+          "to": {
+            "x": 740,
+            "y": 700
+          },
+          "height": 270,
+          "baseElevation": 90,
+          "renderFoundation": false,
+          "thickness": 30,
+          "thicknessSide": "center",
+          "color": "#6d7785"
+        },
+        {
+          "id": "w32",
+          "name": "Axis 3 segment D-C",
+          "from": {
+            "x": 755,
+            "y": 350
+          },
+          "to": {
+            "x": 755,
+            "y": 685
+          },
+          "height": 270,
+          "baseElevation": 90,
+          "renderFoundation": false,
+          "thickness": 30,
+          "thicknessSide": "center",
+          "color": "#6d7785",
+          "openings": [
+            {
+              "id": "door-w32-1",
+              "type": "door",
+              "offset": 237,
+              "length": 90,
+              "baseHeight": 0,
+              "height": 230
+            }
+          ]
+        },
+        {
+          "id": "w34",
+          "name": "Interior wall 2D toward 2C",
+          "from": {
+            "x": 495,
+            "y": 350
+          },
+          "to": {
+            "x": 495,
+            "y": 590
+          },
+          "height": 270,
+          "baseElevation": 90,
+          "renderFoundation": false,
+          "thickness": 20,
+          "thicknessSide": "center",
+          "color": "#6d7785"
+        },
+        {
+          "id": "w35",
+          "name": "Interior wall perpendicular from 2C run",
+          "from": {
+            "x": 485,
+            "y": 580
+          },
+          "to": {
+            "x": 565,
+            "y": 580
+          },
+          "height": 270,
+          "baseElevation": 90,
+          "renderFoundation": false,
+          "thickness": 20,
+          "thicknessSide": "center",
+          "color": "#6d7785"
+        },
+        {
+          "id": "w36",
+          "name": "Interior wall toward w31",
+          "from": {
+            "x": 555,
+            "y": 570
+          },
+          "to": {
+            "x": 555,
+            "y": 715
+          },
+          "height": 270,
+          "baseElevation": 90,
+          "renderFoundation": false,
+          "thickness": 20,
+          "thicknessSide": "center",
+          "color": "#6d7785"
+        },
+        {
+          "id": "w37",
+          "name": "Interior wall C-B' near axis 4 door",
+          "from": {
+            "x": 1122,
+            "y": 715
+          },
+          "to": {
+            "x": 1122,
+            "y": 915
+          },
+          "height": 270,
+          "baseElevation": 90,
+          "renderFoundation": false,
+          "thickness": 24,
+          "thicknessSide": "center",
+          "color": "#6d7785",
+          "openings": [
+            {
+              "id": "door-w37-1",
+              "type": "door",
+              "offset": 15,
+              "length": 90,
+              "baseHeight": 0,
+              "height": 230
+            }
+          ]
+        }
+      ],
+      "spaces": [
+        {
+          "id": "gf-floor-house-raised",
+          "name": "Raised house floor",
+          "boundary": [
+            {
+              "x": 0,
+              "y": 320
+            },
+            {
+              "x": 1460,
+              "y": 320
+            },
+            {
+              "x": 1460,
+              "y": 930
+            },
+            {
+              "x": 995,
+              "y": 930
+            },
+            {
+              "x": 995,
+              "y": 1215
+            },
+            {
+              "x": 0,
+              "y": 1215
+            }
+          ],
+          "baseElevation": 90,
+          "color": "#dceef7"
+        },
+        {
+          "id": "gf-floor-garage",
+          "name": "Garage floor",
+          "boundary": [
+            {
+              "x": 995,
+              "y": 930
+            },
+            {
+              "x": 1445,
+              "y": 930
+            },
+            {
+              "x": 1445,
+              "y": 1580
+            },
+            {
+              "x": 995,
+              "y": 1580
+            }
+          ],
+          "baseElevation": 0,
+          "color": "#ece4d4"
+        },
+        {
+          "id": "gf-floor-3a-4b",
+          "name": "3A-4B floor",
+          "boundary": [
+            {
+              "x": 740,
+              "y": 1230
+            },
+            {
+              "x": 980,
+              "y": 1230
+            },
+            {
+              "x": 980,
+              "y": 1595
+            },
+            {
+              "x": 740,
+              "y": 1595
+            }
+          ],
+          "baseElevation": 90,
+          "color": "#dcebd8"
+        }
+      ],
+      "objects": [
+        {
+          "id": "garage-platform",
+          "name": "Garage platform",
+          "type": "box",
+          "position": {
+            "x": 1065,
+            "y": 985,
+            "z": 0
+          },
+          "size": {
+            "x": 110,
+            "y": 80,
+            "z": 90
+          },
+          "baseElevation": 0,
+          "category": "structural",
+          "color": "#b9a985",
+          "objectKind": "platform",
+          "renderStyle": "solid"
+        },
+        {
+          "id": "p1",
+          "name": "p1",
+          "type": "box",
+          "position": {
+            "x": 15,
+            "y": 335,
+            "z": 0
+          },
+          "size": {
+            "x": 30,
+            "y": 30,
+            "z": 270
+          },
+          "baseElevation": 90,
+          "renderFoundation": true,
+          "category": "structural",
+          "color": "#bcc2c8",
+          "objectKind": "pillar",
+          "renderStyle": "solid",
+          "showLabel": true
+        },
+        {
+          "id": "p2",
+          "name": "p2",
+          "type": "box",
+          "position": {
+            "x": 495,
+            "y": 335,
+            "z": 0
+          },
+          "size": {
+            "x": 30,
+            "y": 30,
+            "z": 270
+          },
+          "baseElevation": 90,
+          "renderFoundation": true,
+          "category": "structural",
+          "color": "#bcc2c8",
+          "objectKind": "pillar",
+          "renderStyle": "solid",
+          "showLabel": true
+        },
+        {
+          "id": "p3",
+          "name": "p3",
+          "type": "box",
+          "position": {
+            "x": 1445,
+            "y": 335,
+            "z": 0
+          },
+          "size": {
+            "x": 30,
+            "y": 30,
+            "z": 270
+          },
+          "baseElevation": 90,
+          "renderFoundation": true,
+          "category": "structural",
+          "color": "#bcc2c8",
+          "objectKind": "pillar",
+          "renderStyle": "solid",
+          "showLabel": true
+        },
+        {
+          "id": "p4",
+          "name": "p4",
+          "type": "box",
+          "position": {
+            "x": 995,
+            "y": 335,
+            "z": 0
+          },
+          "size": {
+            "x": 30,
+            "y": 30,
+            "z": 270
+          },
+          "baseElevation": 90,
+          "renderFoundation": true,
+          "category": "structural",
+          "color": "#bcc2c8",
+          "objectKind": "pillar",
+          "renderStyle": "solid",
+          "showLabel": true
+        },
+        {
+          "id": "p5",
+          "name": "p5",
+          "type": "box",
+          "position": {
+            "x": 755,
+            "y": 335,
+            "z": 0
+          },
+          "size": {
+            "x": 30,
+            "y": 30,
+            "z": 270
+          },
+          "baseElevation": 90,
+          "renderFoundation": true,
+          "category": "structural",
+          "color": "#bcc2c8",
+          "objectKind": "pillar",
+          "renderStyle": "solid",
+          "showLabel": true
+        },
+        {
+          "id": "p6",
+          "name": "p6",
+          "type": "box",
+          "position": {
+            "x": 15,
+            "y": 700,
+            "z": 0
+          },
+          "size": {
+            "x": 30,
+            "y": 30,
+            "z": 270
+          },
+          "baseElevation": 90,
+          "renderFoundation": true,
+          "category": "structural",
+          "color": "#bcc2c8",
+          "objectKind": "pillar",
+          "renderStyle": "solid",
+          "showLabel": true
+        },
+        {
+          "id": "p7",
+          "name": "p7",
+          "type": "box",
+          "position": {
+            "x": 495,
+            "y": 700,
+            "z": 0
+          },
+          "size": {
+            "x": 30,
+            "y": 30,
+            "z": 270
+          },
+          "baseElevation": 90,
+          "renderFoundation": false,
+          "category": "structural",
+          "color": "#bcc2c8",
+          "objectKind": "pillar",
+          "renderStyle": "solid",
+          "showLabel": true
+        },
+        {
+          "id": "p8",
+          "name": "p8",
+          "type": "box",
+          "position": {
+            "x": 1445,
+            "y": 700,
+            "z": 0
+          },
+          "size": {
+            "x": 30,
+            "y": 30,
+            "z": 270
+          },
+          "baseElevation": 90,
+          "renderFoundation": true,
+          "category": "structural",
+          "color": "#bcc2c8",
+          "objectKind": "pillar",
+          "renderStyle": "solid",
+          "showLabel": true
+        },
+        {
+          "id": "p9",
+          "name": "p9",
+          "type": "box",
+          "position": {
+            "x": 995,
+            "y": 700,
+            "z": 0
+          },
+          "size": {
+            "x": 30,
+            "y": 30,
+            "z": 270
+          },
+          "baseElevation": 90,
+          "renderFoundation": false,
+          "category": "structural",
+          "color": "#bcc2c8",
+          "objectKind": "pillar",
+          "renderStyle": "solid",
+          "showLabel": true
+        },
+        {
+          "id": "p10",
+          "name": "p10",
+          "type": "box",
+          "position": {
+            "x": 755,
+            "y": 700,
+            "z": 0
+          },
+          "size": {
+            "x": 30,
+            "y": 30,
+            "z": 270
+          },
+          "baseElevation": 90,
+          "renderFoundation": false,
+          "category": "structural",
+          "color": "#bcc2c8",
+          "objectKind": "pillar",
+          "renderStyle": "solid",
+          "showLabel": true
+        },
+        {
+          "id": "p11",
+          "name": "p11",
+          "type": "box",
+          "position": {
+            "x": 15,
+            "y": 1215,
+            "z": 0
+          },
+          "size": {
+            "x": 30,
+            "y": 30,
+            "z": 270
+          },
+          "baseElevation": 90,
+          "renderFoundation": true,
+          "category": "structural",
+          "color": "#bcc2c8",
+          "objectKind": "pillar",
+          "renderStyle": "solid",
+          "showLabel": true
+        },
+        {
+          "id": "p12",
+          "name": "p12",
+          "type": "box",
+          "position": {
+            "x": 495,
+            "y": 1215,
+            "z": 0
+          },
+          "size": {
+            "x": 30,
+            "y": 30,
+            "z": 270
+          },
+          "baseElevation": 90,
+          "renderFoundation": true,
+          "category": "structural",
+          "color": "#bcc2c8",
+          "objectKind": "pillar",
+          "renderStyle": "solid",
+          "showLabel": true
+        },
+        {
+          "id": "p13",
+          "name": "p13",
+          "type": "box",
+          "position": {
+            "x": 1445,
+            "y": 930,
+            "z": 0
+          },
+          "size": {
+            "x": 30,
+            "y": 30,
+            "z": 270
+          },
+          "baseElevation": 90,
+          "renderFoundation": true,
+          "category": "structural",
+          "color": "#bcc2c8",
+          "objectKind": "pillar",
+          "renderStyle": "solid",
+          "showLabel": true
+        },
+        {
+          "id": "p14",
+          "name": "p14",
+          "type": "box",
+          "position": {
+            "x": 995,
+            "y": 930,
+            "z": 0
+          },
+          "size": {
+            "x": 30,
+            "y": 30,
+            "z": 270
+          },
+          "baseElevation": 90,
+          "renderFoundation": true,
+          "category": "structural",
+          "color": "#bcc2c8",
+          "objectKind": "pillar",
+          "renderStyle": "solid",
+          "showLabel": true
+        },
+        {
+          "id": "p15",
+          "name": "p15",
+          "type": "box",
+          "position": {
+            "x": 1445,
+            "y": 1215,
+            "z": 0
+          },
+          "size": {
+            "x": 30,
+            "y": 30,
+            "z": 360
+          },
+          "baseElevation": 0,
+          "renderFoundation": true,
+          "category": "structural",
+          "color": "#bcc2c8",
+          "objectKind": "pillar",
+          "renderStyle": "solid",
+          "showLabel": true
+        },
+        {
+          "id": "p16",
+          "name": "p16",
+          "type": "box",
+          "position": {
+            "x": 995,
+            "y": 1215,
+            "z": 0
+          },
+          "size": {
+            "x": 30,
+            "y": 30,
+            "z": 270
+          },
+          "baseElevation": 90,
+          "renderFoundation": true,
+          "category": "structural",
+          "color": "#bcc2c8",
+          "objectKind": "pillar",
+          "renderStyle": "solid",
+          "showLabel": true
+        },
+        {
+          "id": "p17",
+          "name": "p17",
+          "type": "box",
+          "position": {
+            "x": 755,
+            "y": 1215,
+            "z": 0
+          },
+          "size": {
+            "x": 30,
+            "y": 30,
+            "z": 270
+          },
+          "baseElevation": 90,
+          "renderFoundation": true,
+          "category": "structural",
+          "color": "#bcc2c8",
+          "objectKind": "pillar",
+          "renderStyle": "solid",
+          "showLabel": true
+        },
+        {
+          "id": "p18",
+          "name": "p18",
+          "type": "box",
+          "position": {
+            "x": 1445,
+            "y": 1580,
+            "z": 0
+          },
+          "size": {
+            "x": 30,
+            "y": 30,
+            "z": 360
+          },
+          "baseElevation": 0,
+          "renderFoundation": true,
+          "category": "structural",
+          "color": "#bcc2c8",
+          "objectKind": "pillar",
+          "renderStyle": "solid",
+          "showLabel": true
+        },
+        {
+          "id": "p19",
+          "name": "p19",
+          "type": "box",
+          "position": {
+            "x": 995,
+            "y": 1580,
+            "z": 0
+          },
+          "size": {
+            "x": 30,
+            "y": 30,
+            "z": 360
+          },
+          "baseElevation": 0,
+          "renderFoundation": true,
+          "category": "structural",
+          "color": "#bcc2c8",
+          "objectKind": "pillar",
+          "renderStyle": "solid",
+          "showLabel": true
+        },
+        {
+          "id": "p20",
+          "name": "p20",
+          "type": "box",
+          "position": {
+            "x": 755,
+            "y": 1580,
+            "z": 0
+          },
+          "size": {
+            "x": 30,
+            "y": 30,
+            "z": 360
+          },
+          "baseElevation": 0,
+          "renderFoundation": true,
+          "category": "structural",
+          "color": "#bcc2c8",
+          "objectKind": "pillar",
+          "renderStyle": "solid",
+          "showLabel": true
+        },
+        {
+          "id": "cp1",
+          "name": "cp1",
+          "type": "box",
+          "position": {
+            "x": 1470,
+            "y": 930,
+            "z": 0
+          },
+          "size": {
+            "x": 20,
+            "y": 20,
+            "z": 260
+          },
+          "baseElevation": 0,
+          "category": "structural",
+          "color": "#bcc2c8",
+          "objectKind": "pillar",
+          "renderStyle": "solid",
+          "showLabel": true
+        },
+        {
+          "id": "cp2",
+          "name": "cp2",
+          "type": "box",
+          "position": {
+            "x": 1820,
+            "y": 930,
+            "z": 0
+          },
+          "size": {
+            "x": 20,
+            "y": 20,
+            "z": 260
+          },
+          "baseElevation": 0,
+          "category": "structural",
+          "color": "#bcc2c8",
+          "objectKind": "pillar",
+          "renderStyle": "solid",
+          "showLabel": true
+        },
+        {
+          "id": "cp3",
+          "name": "cp3",
+          "type": "box",
+          "position": {
+            "x": 1470,
+            "y": 1215,
+            "z": 0
+          },
+          "size": {
+            "x": 20,
+            "y": 20,
+            "z": 260
+          },
+          "baseElevation": 0,
+          "category": "structural",
+          "color": "#bcc2c8",
+          "objectKind": "pillar",
+          "renderStyle": "solid",
+          "showLabel": true
+        },
+        {
+          "id": "cp4",
+          "name": "cp4",
+          "type": "box",
+          "position": {
+            "x": 1820,
+            "y": 1215,
+            "z": 0
+          },
+          "size": {
+            "x": 20,
+            "y": 20,
+            "z": 260
+          },
+          "baseElevation": 0,
+          "category": "structural",
+          "color": "#bcc2c8",
+          "objectKind": "pillar",
+          "renderStyle": "solid",
+          "showLabel": true
+        },
+        {
+          "id": "cp5",
+          "name": "cp5",
+          "type": "box",
+          "position": {
+            "x": 1470,
+            "y": 1580,
+            "z": 0
+          },
+          "size": {
+            "x": 20,
+            "y": 20,
+            "z": 260
+          },
+          "baseElevation": 0,
+          "category": "structural",
+          "color": "#bcc2c8",
+          "objectKind": "pillar",
+          "renderStyle": "solid",
+          "showLabel": true
+        },
+        {
+          "id": "cp6",
+          "name": "cp6",
+          "type": "box",
+          "position": {
+            "x": 1820,
+            "y": 1580,
+            "z": 0
+          },
+          "size": {
+            "x": 20,
+            "y": 20,
+            "z": 260
+          },
+          "baseElevation": 0,
+          "category": "structural",
+          "color": "#bcc2c8",
+          "objectKind": "pillar",
+          "renderStyle": "solid",
+          "showLabel": true
+        },
+        {
+          "id": "garage-side-carport-roof",
+          "name": "Carport roof",
+          "type": "shedRoof",
+          "position": {
+            "x": 1650,
+            "y": 1255,
+            "z": 0
+          },
+          "size": {
+            "x": 380,
+            "y": 670,
+            "z": 15
+          },
+          "baseElevation": 260,
+          "rise": 15,
+          "slopeDirection": "x-",
+          "category": "structural",
+          "color": "#c5ccd3",
+          "objectKind": "roof"
+        },
+        {
+          "id": "carport-car-model-y-juniper",
+          "name": "Tesla Model Y Juniper massing",
+          "type": "box",
+          "position": {
+            "x": 1645,
+            "y": 1255,
+            "z": 0
+          },
+          "size": {
+            "x": 192,
+            "y": 479,
+            "z": 162.4
+          },
+          "baseElevation": 0,
+          "category": "custom",
+          "color": "#f4f4f1",
+          "objectKind": "vehicle",
+          "renderStyle": "solid"
+        },
+        {
+          "id": "garage-step-1",
+          "name": "Garage step 1",
+          "type": "box",
+          "position": {
+            "x": 1135,
+            "y": 985,
+            "z": 0
+          },
+          "size": {
+            "x": 30,
+            "y": 80,
+            "z": 75
+          },
+          "baseElevation": 0,
+          "category": "structural",
+          "color": "#c8b995",
+          "objectKind": "step",
+          "renderStyle": "solid"
+        },
+        {
+          "id": "garage-step-2",
+          "name": "Garage step 2",
+          "type": "box",
+          "position": {
+            "x": 1165,
+            "y": 985,
+            "z": 0
+          },
+          "size": {
+            "x": 30,
+            "y": 80,
+            "z": 60
+          },
+          "baseElevation": 0,
+          "category": "structural",
+          "color": "#c8b995",
+          "objectKind": "step",
+          "renderStyle": "solid"
+        },
+        {
+          "id": "garage-step-3",
+          "name": "Garage step 3",
+          "type": "box",
+          "position": {
+            "x": 1195,
+            "y": 985,
+            "z": 0
+          },
+          "size": {
+            "x": 30,
+            "y": 80,
+            "z": 45
+          },
+          "baseElevation": 0,
+          "category": "structural",
+          "color": "#c8b995",
+          "objectKind": "step",
+          "renderStyle": "solid"
+        },
+        {
+          "id": "garage-step-4",
+          "name": "Garage step 4",
+          "type": "box",
+          "position": {
+            "x": 1225,
+            "y": 985,
+            "z": 0
+          },
+          "size": {
+            "x": 30,
+            "y": 80,
+            "z": 30
+          },
+          "baseElevation": 0,
+          "category": "structural",
+          "color": "#c8b995",
+          "objectKind": "step",
+          "renderStyle": "solid"
+        },
+        {
+          "id": "garage-step-5",
+          "name": "Garage step 5",
+          "type": "box",
+          "position": {
+            "x": 1255,
+            "y": 985,
+            "z": 0
+          },
+          "size": {
+            "x": 30,
+            "y": 80,
+            "z": 15
+          },
+          "baseElevation": 0,
+          "category": "structural",
+          "color": "#c8b995",
+          "objectKind": "step",
+          "renderStyle": "solid"
+        },
+        {
+          "id": "green-platform-south-step-1",
+          "name": "Green platform south step 1",
+          "type": "box",
+          "position": {
+            "x": 845,
+            "y": 1610,
+            "z": 0
+          },
+          "size": {
+            "x": 270,
+            "y": 30,
+            "z": 90
+          },
+          "baseElevation": 0,
+          "category": "structural",
+          "color": "#dcebd8",
+          "objectKind": "step",
+          "renderStyle": "solid"
+        },
+        {
+          "id": "green-platform-west-step-1",
+          "name": "Green platform west step 1",
+          "type": "box",
+          "position": {
+            "x": 725,
+            "y": 1412.5,
+            "z": 0
+          },
+          "size": {
+            "x": 30,
+            "y": 365,
+            "z": 90
+          },
+          "baseElevation": 0,
+          "category": "structural",
+          "color": "#dcebd8",
+          "objectKind": "step",
+          "renderStyle": "solid"
+        },
+        {
+          "id": "green-platform-south-step-2",
+          "name": "Green platform south step 2",
+          "type": "box",
+          "position": {
+            "x": 830,
+            "y": 1640,
+            "z": 0
+          },
+          "size": {
+            "x": 300,
+            "y": 30,
+            "z": 75
+          },
+          "baseElevation": 0,
+          "category": "structural",
+          "color": "#dcebd8",
+          "objectKind": "step",
+          "renderStyle": "solid"
+        },
+        {
+          "id": "green-platform-west-step-2",
+          "name": "Green platform west step 2",
+          "type": "box",
+          "position": {
+            "x": 695,
+            "y": 1427.5,
+            "z": 0
+          },
+          "size": {
+            "x": 30,
+            "y": 395,
+            "z": 75
+          },
+          "baseElevation": 0,
+          "category": "structural",
+          "color": "#dcebd8",
+          "objectKind": "step",
+          "renderStyle": "solid"
+        },
+        {
+          "id": "green-platform-south-step-3",
+          "name": "Green platform south step 3",
+          "type": "box",
+          "position": {
+            "x": 815,
+            "y": 1670,
+            "z": 0
+          },
+          "size": {
+            "x": 330,
+            "y": 30,
+            "z": 60
+          },
+          "baseElevation": 0,
+          "category": "structural",
+          "color": "#dcebd8",
+          "objectKind": "step",
+          "renderStyle": "solid"
+        },
+        {
+          "id": "green-platform-west-step-3",
+          "name": "Green platform west step 3",
+          "type": "box",
+          "position": {
+            "x": 665,
+            "y": 1442.5,
+            "z": 0
+          },
+          "size": {
+            "x": 30,
+            "y": 425,
+            "z": 60
+          },
+          "baseElevation": 0,
+          "category": "structural",
+          "color": "#dcebd8",
+          "objectKind": "step",
+          "renderStyle": "solid"
+        },
+        {
+          "id": "green-platform-south-step-4",
+          "name": "Green platform south step 4",
+          "type": "box",
+          "position": {
+            "x": 800,
+            "y": 1700,
+            "z": 0
+          },
+          "size": {
+            "x": 360,
+            "y": 30,
+            "z": 45
+          },
+          "baseElevation": 0,
+          "category": "structural",
+          "color": "#dcebd8",
+          "objectKind": "step",
+          "renderStyle": "solid"
+        },
+        {
+          "id": "green-platform-west-step-4",
+          "name": "Green platform west step 4",
+          "type": "box",
+          "position": {
+            "x": 635,
+            "y": 1457.5,
+            "z": 0
+          },
+          "size": {
+            "x": 30,
+            "y": 455,
+            "z": 45
+          },
+          "baseElevation": 0,
+          "category": "structural",
+          "color": "#dcebd8",
+          "objectKind": "step",
+          "renderStyle": "solid"
+        },
+        {
+          "id": "green-platform-south-step-5",
+          "name": "Green platform south step 5",
+          "type": "box",
+          "position": {
+            "x": 785,
+            "y": 1730,
+            "z": 0
+          },
+          "size": {
+            "x": 390,
+            "y": 30,
+            "z": 30
+          },
+          "baseElevation": 0,
+          "category": "structural",
+          "color": "#dcebd8",
+          "objectKind": "step",
+          "renderStyle": "solid"
+        },
+        {
+          "id": "green-platform-west-step-5",
+          "name": "Green platform west step 5",
+          "type": "box",
+          "position": {
+            "x": 605,
+            "y": 1472.5,
+            "z": 0
+          },
+          "size": {
+            "x": 30,
+            "y": 485,
+            "z": 30
+          },
+          "baseElevation": 0,
+          "category": "structural",
+          "color": "#dcebd8",
+          "objectKind": "step",
+          "renderStyle": "solid"
+        },
+        {
+          "id": "green-platform-south-step-6",
+          "name": "Green platform south step 6",
+          "type": "box",
+          "position": {
+            "x": 770,
+            "y": 1760,
+            "z": 0
+          },
+          "size": {
+            "x": 420,
+            "y": 30,
+            "z": 15
+          },
+          "baseElevation": 0,
+          "category": "structural",
+          "color": "#dcebd8",
+          "objectKind": "step",
+          "renderStyle": "solid"
+        },
+        {
+          "id": "green-platform-west-step-6",
+          "name": "Green platform west step 6",
+          "type": "box",
+          "position": {
+            "x": 575,
+            "y": 1487.5,
+            "z": 0
+          },
+          "size": {
+            "x": 30,
+            "y": 515,
+            "z": 15
+          },
+          "baseElevation": 0,
+          "category": "structural",
+          "color": "#dcebd8",
+          "objectKind": "step",
+          "renderStyle": "solid"
+        },
+        {
+          "id": "garage-car-rav4-prime",
+          "name": "RAV4 Prime massing",
+          "type": "box",
+          "position": {
+            "x": 1220,
+            "y": 1290,
+            "z": 0
+          },
+          "size": {
+            "x": 185,
+            "y": 460,
+            "z": 170
+          },
+          "baseElevation": 0,
+          "category": "custom",
+          "color": "#3f4348",
+          "objectKind": "vehicle",
+          "renderStyle": "solid"
+        }
+      ]
+    },
+    {
+      "id": "first-floor",
+      "name": "First Floor",
+      "elevation": 428,
+      "defaultWallHeight": 260,
+      "axes": {
+        "vertical": [
+          {
+            "coordinate": 15,
+            "label": "1"
+          },
+          {
+            "coordinate": 495,
+            "label": "2"
+          },
+          {
+            "coordinate": 755,
+            "label": "3"
+          },
+          {
+            "coordinate": 995,
+            "label": "4"
+          },
+          {
+            "coordinate": 1445,
+            "label": "5"
+          }
+        ],
+        "horizontal": [
+          {
+            "coordinate": 335,
+            "label": "D"
+          },
+          {
+            "coordinate": 700,
+            "label": "C"
+          },
+          {
+            "coordinate": 930,
+            "label": "B'"
+          },
+          {
+            "coordinate": 1215,
+            "label": "B"
+          },
+          {
+            "coordinate": 1580,
+            "label": "A"
+          }
+        ]
+      },
+      "walls": [
+        {
+          "id": "fw1",
+          "name": "First floor wall p1-p2",
+          "from": {
+            "x": 30,
+            "y": 335
+          },
+          "to": {
+            "x": 480,
+            "y": 335
+          },
+          "height": 268,
+          "thickness": 30,
+          "thicknessSide": "center",
+          "color": "#6d7785"
+        },
+        {
+          "id": "fw2",
+          "name": "First floor wall p2-p5",
+          "from": {
+            "x": 510,
+            "y": 335
+          },
+          "to": {
+            "x": 740,
+            "y": 335
+          },
+          "height": 268,
+          "thickness": 30,
+          "thicknessSide": "center",
+          "color": "#6d7785"
+        },
+        {
+          "id": "fw3",
+          "name": "First floor wall p5-p4",
+          "from": {
+            "x": 770,
+            "y": 335
+          },
+          "to": {
+            "x": 980,
+            "y": 335
+          },
+          "height": 268,
+          "thickness": 30,
+          "thicknessSide": "center",
+          "color": "#6d7785"
+        },
+        {
+          "id": "fw4",
+          "name": "First floor wall p4-p3",
+          "from": {
+            "x": 1010,
+            "y": 335
+          },
+          "to": {
+            "x": 1430,
+            "y": 335
+          },
+          "height": 268,
+          "thickness": 30,
+          "thicknessSide": "center",
+          "color": "#6d7785"
+        },
+        {
+          "id": "fw5",
+          "name": "First floor wall p3-p8",
+          "from": {
+            "x": 1445,
+            "y": 350
+          },
+          "to": {
+            "x": 1445,
+            "y": 685
+          },
+          "height": 268,
+          "thickness": 30,
+          "thicknessSide": "center",
+          "color": "#6d7785"
+        },
+        {
+          "id": "fw6",
+          "name": "First floor wall p8-p13",
+          "from": {
+            "x": 1445,
+            "y": 715
+          },
+          "to": {
+            "x": 1445,
+            "y": 915
+          },
+          "height": 268,
+          "thickness": 30,
+          "thicknessSide": "center",
+          "color": "#6d7785"
+        },
+        {
+          "id": "fw7",
+          "name": "First floor wall p13-p15",
+          "from": {
+            "x": 1445,
+            "y": 945
+          },
+          "to": {
+            "x": 1445,
+            "y": 1200
+          },
+          "height": 268,
+          "thickness": 30,
+          "thicknessSide": "center",
+          "color": "#6d7785"
+        },
+        {
+          "id": "fw8",
+          "name": "First floor wall p15-p16",
+          "from": {
+            "x": 1430,
+            "y": 1215
+          },
+          "to": {
+            "x": 1010,
+            "y": 1215
+          },
+          "height": 268,
+          "thickness": 30,
+          "thicknessSide": "center",
+          "color": "#6d7785"
+        },
+        {
+          "id": "fw9",
+          "name": "First floor wall p16-p17",
+          "from": {
+            "x": 980,
+            "y": 1215
+          },
+          "to": {
+            "x": 770,
+            "y": 1215
+          },
+          "height": 268,
+          "thickness": 30,
+          "thicknessSide": "center",
+          "color": "#6d7785"
+        },
+        {
+          "id": "fw10",
+          "name": "First floor wall p17-p12",
+          "from": {
+            "x": 740,
+            "y": 1215
+          },
+          "to": {
+            "x": 510,
+            "y": 1215
+          },
+          "height": 268,
+          "thickness": 30,
+          "thicknessSide": "center",
+          "color": "#6d7785"
+        },
+        {
+          "id": "fw11",
+          "name": "First floor wall p12-p11",
+          "from": {
+            "x": 480,
+            "y": 1215
+          },
+          "to": {
+            "x": 30,
+            "y": 1215
+          },
+          "height": 268,
+          "thickness": 30,
+          "thicknessSide": "center",
+          "color": "#6d7785"
+        },
+        {
+          "id": "fw12",
+          "name": "First floor wall p11-p6",
+          "from": {
+            "x": 15,
+            "y": 1200
+          },
+          "to": {
+            "x": 15,
+            "y": 715
+          },
+          "height": 268,
+          "thickness": 30,
+          "thicknessSide": "center",
+          "color": "#6d7785"
+        },
+        {
+          "id": "fw13",
+          "name": "First floor wall p6-p1",
+          "from": {
+            "x": 15,
+            "y": 685
+          },
+          "to": {
+            "x": 15,
+            "y": 350
+          },
+          "height": 268,
+          "thickness": 30,
+          "thicknessSide": "center",
+          "color": "#6d7785"
+        },
+        {
+          "id": "fw14",
+          "name": "First floor wall p5-p10",
+          "from": {
+            "x": 755,
+            "y": 350
+          },
+          "to": {
+            "x": 755,
+            "y": 685
+          },
+          "height": 268,
+          "thickness": 30,
+          "thicknessSide": "center",
+          "color": "#6d7785"
+        },
+        {
+          "id": "fw15",
+          "name": "First floor wall p4-p9",
+          "from": {
+            "x": 995,
+            "y": 350
+          },
+          "to": {
+            "x": 995,
+            "y": 685
+          },
+          "height": 268,
+          "thickness": 30,
+          "thicknessSide": "center",
+          "color": "#6d7785"
+        },
+        {
+          "id": "fw16",
+          "name": "First floor wall p9-p8",
+          "from": {
+            "x": 1010,
+            "y": 703
+          },
+          "to": {
+            "x": 1430,
+            "y": 703
+          },
+          "height": 268,
+          "thickness": 24,
+          "thicknessSide": "center",
+          "color": "#6d7785"
+        },
+        {
+          "id": "fw17",
+          "name": "First floor wall p14-p16",
+          "from": {
+            "x": 990,
+            "y": 945
+          },
+          "to": {
+            "x": 990,
+            "y": 1200
+          },
+          "height": 268,
+          "thickness": 20,
+          "thicknessSide": "center",
+          "color": "#6d7785"
+        },
+        {
+          "id": "fw18",
+          "name": "First floor wall p7-p10",
+          "from": {
+            "x": 510,
+            "y": 700
+          },
+          "to": {
+            "x": 740,
+            "y": 700
+          },
+          "height": 268,
+          "thickness": 30,
+          "thicknessSide": "center",
+          "color": "#6d7785"
+        },
+        {
+          "id": "fw19",
+          "name": "First floor wall p14 toward p9",
+          "from": {
+            "x": 990,
+            "y": 915
+          },
+          "to": {
+            "x": 990,
+            "y": 845
+          },
+          "height": 268,
+          "thickness": 20,
+          "thicknessSide": "center",
+          "color": "#6d7785"
+        },
+        {
+          "id": "fw20",
+          "name": "First floor wall next to p12 parallel to fw17",
+          "from": {
+            "x": 465,
+            "y": 1200
+          },
+          "to": {
+            "x": 465,
+            "y": 709
+          },
+          "height": 268,
+          "thickness": 24,
+          "thicknessSide": "center",
+          "color": "#6d7785"
+        },
+        {
+          "id": "fw21",
+          "name": "First floor wall connecting fw20 and fw19",
+          "from": {
+            "x": 477,
+            "y": 855
+          },
+          "to": {
+            "x": 980,
+            "y": 855
+          },
+          "height": 268,
+          "thickness": 20,
+          "thicknessSide": "center",
+          "color": "#6d7785"
+        },
+        {
+          "id": "fw22",
+          "name": "First floor wall p13 toward p14",
+          "from": {
+            "x": 1430,
+            "y": 930
+          },
+          "to": {
+            "x": 1130,
+            "y": 930
+          },
+          "height": 268,
+          "thickness": 24,
+          "thicknessSide": "center",
+          "color": "#6d7785"
+        },
+        {
+          "id": "fw23",
+          "name": "First floor wall p7 toward p6",
+          "from": {
+            "x": 480,
+            "y": 697
+          },
+          "to": {
+            "x": 380,
+            "y": 697
+          },
+          "height": 268,
+          "thickness": 24,
+          "thicknessSide": "center",
+          "color": "#6d7785"
+        },
+        {
+          "id": "fw24",
+          "name": "First floor wall from fw1 parallel to fw13",
+          "from": {
+            "x": 312,
+            "y": 350
+          },
+          "to": {
+            "x": 312,
+            "y": 550
+          },
+          "height": 268,
+          "thickness": 24,
+          "thicknessSide": "center",
+          "color": "#6d7785"
+        },
+        {
+          "id": "fw25",
+          "name": "First floor wall from fw24 toward fw14",
+          "from": {
+            "x": 324,
+            "y": 538
+          },
+          "to": {
+            "x": 404,
+            "y": 538
+          },
+          "height": 268,
+          "thickness": 24,
+          "thicknessSide": "center",
+          "color": "#6d7785"
+        },
+        {
+          "id": "fw26",
+          "name": "First floor wall connecting fw25 and fw23",
+          "from": {
+            "x": 392,
+            "y": 550
+          },
+          "to": {
+            "x": 392,
+            "y": 685
+          },
+          "height": 268,
+          "thickness": 24,
+          "thicknessSide": "center",
+          "color": "#6d7785"
+        },
+        {
+          "id": "fw27",
+          "name": "First floor wall parallel to fw14",
+          "from": {
+            "x": 565,
+            "y": 350
+          },
+          "to": {
+            "x": 565,
+            "y": 685
+          },
+          "height": 268,
+          "thickness": 20,
+          "thicknessSide": "center",
+          "color": "#6d7785"
+        },
+        {
+          "id": "fw28",
+          "name": "First floor wall from fw22 toward fw16",
+          "from": {
+            "x": 1142,
+            "y": 918
+          },
+          "to": {
+            "x": 1142,
+            "y": 715
+          },
+          "height": 268,
+          "thickness": 24,
+          "thicknessSide": "center",
+          "color": "#6d7785"
+        },
+        {
+          "id": "fw29",
+          "name": "First floor wall continuing fw21 toward fw28",
+          "from": {
+            "x": 1000,
+            "y": 855
+          },
+          "to": {
+            "x": 1130,
+            "y": 855
+          },
+          "height": 268,
+          "thickness": 20,
+          "thicknessSide": "center",
+          "color": "#6d7785"
+        }
+      ],
+      "spaces": [],
+      "objects": [
+        {
+          "id": "slab1",
+          "name": "Slab 1",
+          "type": "slab",
+          "boundary": [
+            {
+              "x": 0,
+              "y": 320
+            },
+            {
+              "x": 1460,
+              "y": 320
+            },
+            {
+              "x": 1460,
+              "y": 1595
+            },
+            {
+              "x": 740,
+              "y": 1595
+            },
+            {
+              "x": 740,
+              "y": 1230
+            },
+            {
+              "x": 0,
+              "y": 1230
+            }
+          ],
+          "baseElevation": -68,
+          "thickness": 68,
+          "category": "structural",
+          "color": "#6d7785"
+        },
+        {
+          "id": "p21",
+          "name": "p21",
+          "type": "box",
+          "position": {
+            "x": 15,
+            "y": 335,
+            "z": 0
+          },
+          "size": {
+            "x": 30,
+            "y": 30,
+            "z": 268
+          },
+          "baseElevation": 0,
+          "category": "structural",
+          "color": "#bcc2c8",
+          "objectKind": "pillar",
+          "renderStyle": "solid",
+          "showLabel": true
+        },
+        {
+          "id": "p22",
+          "name": "p22",
+          "type": "box",
+          "position": {
+            "x": 495,
+            "y": 335,
+            "z": 0
+          },
+          "size": {
+            "x": 30,
+            "y": 30,
+            "z": 268
+          },
+          "baseElevation": 0,
+          "category": "structural",
+          "color": "#bcc2c8",
+          "objectKind": "pillar",
+          "renderStyle": "solid",
+          "showLabel": true
+        },
+        {
+          "id": "p23",
+          "name": "p23",
+          "type": "box",
+          "position": {
+            "x": 1445,
+            "y": 335,
+            "z": 0
+          },
+          "size": {
+            "x": 30,
+            "y": 30,
+            "z": 268
+          },
+          "baseElevation": 0,
+          "category": "structural",
+          "color": "#bcc2c8",
+          "objectKind": "pillar",
+          "renderStyle": "solid",
+          "showLabel": true
+        },
+        {
+          "id": "p24",
+          "name": "p24",
+          "type": "box",
+          "position": {
+            "x": 995,
+            "y": 335,
+            "z": 0
+          },
+          "size": {
+            "x": 30,
+            "y": 30,
+            "z": 268
+          },
+          "baseElevation": 0,
+          "category": "structural",
+          "color": "#bcc2c8",
+          "objectKind": "pillar",
+          "renderStyle": "solid",
+          "showLabel": true
+        },
+        {
+          "id": "p25",
+          "name": "p25",
+          "type": "box",
+          "position": {
+            "x": 755,
+            "y": 335,
+            "z": 0
+          },
+          "size": {
+            "x": 30,
+            "y": 30,
+            "z": 268
+          },
+          "baseElevation": 0,
+          "category": "structural",
+          "color": "#bcc2c8",
+          "objectKind": "pillar",
+          "renderStyle": "solid",
+          "showLabel": true
+        },
+        {
+          "id": "p26",
+          "name": "p26",
+          "type": "box",
+          "position": {
+            "x": 15,
+            "y": 700,
+            "z": 0
+          },
+          "size": {
+            "x": 30,
+            "y": 30,
+            "z": 268
+          },
+          "baseElevation": 0,
+          "category": "structural",
+          "color": "#bcc2c8",
+          "objectKind": "pillar",
+          "renderStyle": "solid",
+          "showLabel": true
+        },
+        {
+          "id": "p27",
+          "name": "p27",
+          "type": "box",
+          "position": {
+            "x": 495,
+            "y": 700,
+            "z": 0
+          },
+          "size": {
+            "x": 30,
+            "y": 30,
+            "z": 268
+          },
+          "baseElevation": 0,
+          "category": "structural",
+          "color": "#bcc2c8",
+          "objectKind": "pillar",
+          "renderStyle": "solid",
+          "showLabel": true
+        },
+        {
+          "id": "p28",
+          "name": "p28",
+          "type": "box",
+          "position": {
+            "x": 1445,
+            "y": 700,
+            "z": 0
+          },
+          "size": {
+            "x": 30,
+            "y": 30,
+            "z": 268
+          },
+          "baseElevation": 0,
+          "category": "structural",
+          "color": "#bcc2c8",
+          "objectKind": "pillar",
+          "renderStyle": "solid",
+          "showLabel": true
+        },
+        {
+          "id": "p29",
+          "name": "p29",
+          "type": "box",
+          "position": {
+            "x": 995,
+            "y": 700,
+            "z": 0
+          },
+          "size": {
+            "x": 30,
+            "y": 30,
+            "z": 268
+          },
+          "baseElevation": 0,
+          "category": "structural",
+          "color": "#bcc2c8",
+          "objectKind": "pillar",
+          "renderStyle": "solid",
+          "showLabel": true
+        },
+        {
+          "id": "p30",
+          "name": "p30",
+          "type": "box",
+          "position": {
+            "x": 755,
+            "y": 700,
+            "z": 0
+          },
+          "size": {
+            "x": 30,
+            "y": 30,
+            "z": 268
+          },
+          "baseElevation": 0,
+          "category": "structural",
+          "color": "#bcc2c8",
+          "objectKind": "pillar",
+          "renderStyle": "solid",
+          "showLabel": true
+        },
+        {
+          "id": "p31",
+          "name": "p31",
+          "type": "box",
+          "position": {
+            "x": 15,
+            "y": 1215,
+            "z": 0
+          },
+          "size": {
+            "x": 30,
+            "y": 30,
+            "z": 268
+          },
+          "baseElevation": 0,
+          "category": "structural",
+          "color": "#bcc2c8",
+          "objectKind": "pillar",
+          "renderStyle": "solid",
+          "showLabel": true
+        },
+        {
+          "id": "p32",
+          "name": "p32",
+          "type": "box",
+          "position": {
+            "x": 495,
+            "y": 1215,
+            "z": 0
+          },
+          "size": {
+            "x": 30,
+            "y": 30,
+            "z": 268
+          },
+          "baseElevation": 0,
+          "category": "structural",
+          "color": "#bcc2c8",
+          "objectKind": "pillar",
+          "renderStyle": "solid",
+          "showLabel": true
+        },
+        {
+          "id": "p33",
+          "name": "p33",
+          "type": "box",
+          "position": {
+            "x": 1445,
+            "y": 930,
+            "z": 0
+          },
+          "size": {
+            "x": 30,
+            "y": 30,
+            "z": 268
+          },
+          "baseElevation": 0,
+          "category": "structural",
+          "color": "#bcc2c8",
+          "objectKind": "pillar",
+          "renderStyle": "solid",
+          "showLabel": true
+        },
+        {
+          "id": "p34",
+          "name": "p34",
+          "type": "box",
+          "position": {
+            "x": 995,
+            "y": 930,
+            "z": 0
+          },
+          "size": {
+            "x": 30,
+            "y": 30,
+            "z": 268
+          },
+          "baseElevation": 0,
+          "category": "structural",
+          "color": "#bcc2c8",
+          "objectKind": "pillar",
+          "renderStyle": "solid",
+          "showLabel": true
+        },
+        {
+          "id": "p35",
+          "name": "p35",
+          "type": "box",
+          "position": {
+            "x": 1445,
+            "y": 1215,
+            "z": 0
+          },
+          "size": {
+            "x": 30,
+            "y": 30,
+            "z": 268
+          },
+          "baseElevation": 0,
+          "category": "structural",
+          "color": "#bcc2c8",
+          "objectKind": "pillar",
+          "renderStyle": "solid",
+          "showLabel": true
+        },
+        {
+          "id": "p36",
+          "name": "p36",
+          "type": "box",
+          "position": {
+            "x": 995,
+            "y": 1215,
+            "z": 0
+          },
+          "size": {
+            "x": 30,
+            "y": 30,
+            "z": 268
+          },
+          "baseElevation": 0,
+          "category": "structural",
+          "color": "#bcc2c8",
+          "objectKind": "pillar",
+          "renderStyle": "solid",
+          "showLabel": true
+        },
+        {
+          "id": "p37",
+          "name": "p37",
+          "type": "box",
+          "position": {
+            "x": 755,
+            "y": 1215,
+            "z": 0
+          },
+          "size": {
+            "x": 30,
+            "y": 30,
+            "z": 268
+          },
+          "baseElevation": 0,
+          "category": "structural",
+          "color": "#bcc2c8",
+          "objectKind": "pillar",
+          "renderStyle": "solid",
+          "showLabel": true
+        }
+      ]
+    }
+  ]
+}

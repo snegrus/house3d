@@ -2,13 +2,15 @@ import { PointerEvent, WheelEvent, useMemo, useRef, useState } from "react";
 import type { Floor } from "./model";
 import {
   getFloorBounds,
+  getObjectCenter,
+  getObjectFootprint,
   getStructuralAxes,
   wallOpeningSegment,
   wallFootprint,
   wallLabelPoint,
   wallMetrics,
 } from "./geometry";
-import { isSolidStructuralStep } from "./houseObjects";
+import { isSolidObject } from "./houseObjects";
 
 type Plan2DProps = {
   floor: Floor;
@@ -200,7 +202,7 @@ export function Plan2D({ floor }: Plan2DProps) {
             </g>
           ))}
           {floor.objects.map((object) => (
-            object.type === "box" ? (
+            object.type === "box" || object.type === "shedRoof" ? (
               <g key={object.id} transform={`translate(${object.position.x} ${object.position.y}) rotate(${((object.rotationZ ?? 0) * 180) / Math.PI})`}>
                 <rect
                   x={-object.size.x / 2}
@@ -208,7 +210,13 @@ export function Plan2D({ floor }: Plan2DProps) {
                   width={object.size.x}
                   height={object.size.y}
                   fill={object.color ?? "#69788c"}
-                  fillOpacity={isSolidStructuralStep(object.id) ? "1" : "0.85"}
+                  fillOpacity={
+                    object.type === "shedRoof"
+                      ? "0.35"
+                      : isSolidObject(object)
+                        ? "1"
+                        : "0.85"
+                  }
                   stroke="#27313f"
                   strokeWidth="4"
                 />
@@ -219,15 +227,15 @@ export function Plan2D({ floor }: Plan2DProps) {
             ) : (
               <g key={object.id}>
                 <polygon
-                  points={object.boundary.map((point) => `${point.x},${point.y}`).join(" ")}
+                  points={getObjectFootprint(object).map((point) => `${point.x},${point.y}`).join(" ")}
                   fill={object.color ?? "#69788c"}
                   fillOpacity="0.85"
                   stroke="#27313f"
                   strokeWidth="4"
                 />
                 <text
-                  x={averageCoordinate(object.boundary, "x")}
-                  y={averageCoordinate(object.boundary, "y")}
+                  x={getObjectCenter(object).x}
+                  y={getObjectCenter(object).y}
                   textAnchor="middle"
                   className="plan-label"
                 >
@@ -253,9 +261,4 @@ export function Plan2D({ floor }: Plan2DProps) {
 
 function scaleToOffset(worldCoordinate: number, viewCenterCoordinate: number, scale: number) {
   return (worldCoordinate - viewCenterCoordinate) * scale;
-}
-
-function averageCoordinate(points: { x: number; y: number }[], axis: "x" | "y") {
-  if (points.length === 0) return 0;
-  return points.reduce((sum, point) => sum + point[axis], 0) / points.length;
 }

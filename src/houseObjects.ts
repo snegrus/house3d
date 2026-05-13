@@ -1,8 +1,13 @@
-export const isPillar = (id: string) => /^p\d+$/.test(id);
-export const isGreenPlatformStep = (id: string) => id.startsWith("green-platform-");
-export const isGarageStepOrPlatform = (id: string) =>
-  id === "garage-platform" || id.startsWith("garage-step-");
-export const isGarageCar = (id: string) => id === "garage-car-rav4-prime";
+import type { HouseObject } from "./model";
 
-export const isSolidStructuralStep = (id: string) =>
-  isGreenPlatformStep(id) || isGarageStepOrPlatform(id) || isGarageCar(id);
+export function isPillarObject(object: HouseObject) {
+  return object.objectKind === "pillar";
+}
+
+export function isSolidObject(object: HouseObject) {
+  return object.renderStyle === "solid";
+}
+
+export function shouldShowObjectLabel(object: HouseObject) {
+  return object.showLabel === true;
+}
